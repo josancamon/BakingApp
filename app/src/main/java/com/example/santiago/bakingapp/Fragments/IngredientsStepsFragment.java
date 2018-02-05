@@ -1,5 +1,6 @@
 package com.example.santiago.bakingapp.Fragments;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Adapters.RecyclerIngredientsAdapter;
@@ -47,7 +49,8 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
     private RecyclerStepsAdapter recyclerStepsAdapter;
     private static final int LOADER_ID = 1;
     private OnStepClickListener onStepClickListener;
-
+    private ProgressBar progressBar;
+    private ConstraintLayout constraintLayout;
     public interface OnStepClickListener{
         void onStepClickListener(Step step);
     }
@@ -65,6 +68,10 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_ingredients_and_steps, container, false);
+        progressBar = rootView.findViewById(R.id.progress_bar_steps);
+        progressBar.setVisibility(View.GONE);
+        constraintLayout = rootView.findViewById(R.id.ingredients_steps_fragment);
+        constraintLayout.setVisibility(View.INVISIBLE);
         CardView ingredientsCardView = rootView.findViewById(R.id.ingredients_card_view);
         ingredientsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +82,6 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
                 if (inflaterPopUpWindow != null) {
                     layout = inflaterPopUpWindow.inflate(R.layout.fragment_ingredients_list_pop_up, container, false);
                 }
-                /*RecyclerView recyclerView1 = layout.findViewById(R.id.ingredietsRecycler);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
-                recyclerView1.setLayoutManager(layoutManager);
-                recyclerView1.setHasFixedSize(true);
-                RecyclerIngredientsAdapter recyclerRecipesAdapter = new RecyclerIngredientsAdapter(container.getContext());
-                recyclerView1.setAdapter(recyclerRecipesAdapter);
-                recyclerRecipesAdapter.setData(insertFakeData());*/
                 PopupWindow pw = new PopupWindow(layout, rootView.getWidth() - 35, 470, true);
                 pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
             }
@@ -96,27 +96,15 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
         return rootView;
     }
     private void loadData(){
-        getLoaderManager().initLoader(LOADER_ID,null,this);
         LoaderManager loaderManager = getLoaderManager();
         Loader<List<Step>> loader = loaderManager.getLoader(LOADER_ID);
 
         if (loader == null) {
+            progressBar.setVisibility(View.VISIBLE);
             loaderManager.initLoader(LOADER_ID, null, this);
         } else {
             loaderManager.restartLoader(LOADER_ID, null, this);
         }
-    }
-
-    public List<Ingredient> insertFakeData() {
-        List<Ingredient> fakeRecipesDataList = new ArrayList<>();
-        Ingredient recipe = new Ingredient( "1", "cups", "milk");
-        fakeRecipesDataList.add(recipe);
-        fakeRecipesDataList.add(recipe);
-        fakeRecipesDataList.add(recipe);
-        fakeRecipesDataList.add(recipe);
-        fakeRecipesDataList.add(recipe);
-        fakeRecipesDataList.add(recipe);
-        return fakeRecipesDataList;
     }
 
     @Override
@@ -154,8 +142,8 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
     @Override
     public void onLoadFinished(Loader<List<Step>> loader, List<Step> data) {
         recyclerStepsAdapter.setData(data);
-        Step step = data.get(1);
-        Log.d(TAG, "onLoadFinished: " + step.getDescription());
+        progressBar.setVisibility(View.GONE);
+        constraintLayout.setVisibility(View.VISIBLE);
     }
 
 

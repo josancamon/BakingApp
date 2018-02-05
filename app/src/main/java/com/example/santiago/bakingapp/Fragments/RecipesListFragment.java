@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
@@ -33,7 +35,7 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     private RecyclerRecipesAdapter recyclerRecipesAdapter;
     OnRecipeClickListener onRecipeClickListener;
     private static final int LOADER_ID = 1;
-
+    private ProgressBar progressBar;
     public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipeClicked);
     }
@@ -55,7 +57,8 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipes_list, container, false);
-
+        progressBar = rootView.findViewById(R.id.progress_bar_recipes);
+        progressBar.setVisibility(View.GONE);
         recyclerView = rootView.findViewById(R.id.recycler_recipes);
         LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -67,17 +70,16 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         return rootView;
     }
     private void loadData(){
-        getLoaderManager().initLoader(LOADER_ID,null,this);
         LoaderManager loaderManager = getLoaderManager();
         Loader<List<Recipe>> loader = loaderManager.getLoader(LOADER_ID);
 
         if (loader == null) {
+            progressBar.setVisibility(View.VISIBLE);
             loaderManager.initLoader(LOADER_ID, null, this);
         } else {
             loaderManager.restartLoader(LOADER_ID, null, this);
         }
     }
-
     @Override
     public void onClick(Recipe recipeClicked) {
         onRecipeClickListener.onRecipeClick(recipeClicked);
@@ -107,13 +109,13 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     @Override
     public void onLoadFinished(Loader<List<Recipe>> loader, List<Recipe> data) {
         recyclerRecipesAdapter.setData(data);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onLoaderReset(Loader<List<Recipe>> loader) {
 
     }
-
 
 
 }

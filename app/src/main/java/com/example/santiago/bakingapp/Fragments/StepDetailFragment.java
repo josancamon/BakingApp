@@ -1,14 +1,22 @@
 package com.example.santiago.bakingapp.Fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.santiago.bakingapp.Model.Step;
@@ -30,12 +38,14 @@ import com.google.android.exoplayer2.util.Util;
  * Created by Santiago on 29/01/2018.
  */
 
-public class StepDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Step> {
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer simpleExoPlayer;
     private TextView stepDescription;
     private String stepDescriptionString;
     private String videoUrl;
+    private ImageView nextImageView;
+
     private static final String TAG = StepDetailFragment.class.getSimpleName();
     public StepDetailFragment(){}
 
@@ -43,14 +53,28 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_step_detail,container,false);
+        nextImageView = rootView.findViewById(R.id.next_video);
+        nextImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StepDetailFragment detailFragment = new StepDetailFragment();
+                //detailFragment.setStepData();
+            }
+        });
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
-        Uri uri =Uri.parse(videoUrl).buildUpon().build();
-        initializePlayer(uri);
+        if (!videoUrl.equals("")){
+            Uri uri =Uri.parse(videoUrl).buildUpon().build();
+            initializePlayer(uri);
+        }else{
+            Bitmap noVideoImage = BitmapFactory.decodeResource(getResources(), R.drawable.card_shadow);
+            //simpleExoPlayerView.setDefaultArtwork(noVideoImage);
+        }
         //needed to get the video url and the description by an intent
         stepDescription = rootView.findViewById(R.id.step_description);
         stepDescription.setText(stepDescriptionString);
         return rootView;
     }
+
     private void initializePlayer(Uri uri){
         if (simpleExoPlayer == null) {
             // Create an instance of the ExoPlayer.
@@ -79,5 +103,26 @@ public class StepDetailFragment extends Fragment {
             videoUrl = "";
         }
         stepDescriptionString = stepDescriptionReceived;
+    }
+
+    @Override
+    public Loader<Step> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Step>(getActivity()) {
+            @Override
+            public Step loadInBackground() {
+                Step step;
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Step> loader, Step data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Step> loader) {
+
     }
 }

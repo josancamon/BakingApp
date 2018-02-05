@@ -1,6 +1,7 @@
 package com.example.santiago.bakingapp.Utilities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
@@ -66,8 +67,16 @@ public final class NetworkUtils {
             String recipeId = recipe.getString("id");
             String recipeName = recipe.getString("name");
             String recipeServings = String.valueOf(recipe.getInt("servings"));
-            JSONArray recipeIngredients = recipe.getJSONArray("ingredients");
-            Recipe actualRecipe = new Recipe(recipeId, recipeName, recipeServings);
+            JSONArray recipeSteps = recipe.getJSONArray("steps");
+            JSONObject step = recipeSteps.getJSONObject(recipeSteps.length()-1);
+            String videoUrl = step.getString("videoURL");
+            Bitmap bitmapImage= null;
+            try {
+                bitmapImage = Utils.retriveVideoFrameFromVideo(videoUrl);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            Recipe actualRecipe = new Recipe(recipeId, recipeName, recipeServings,bitmapImage);
             //Log.d(TAG, "getJsonRecipes: " + actualRecipe.getRecipeName());
             recipes.add(actualRecipe);
         }
@@ -105,11 +114,22 @@ public final class NetworkUtils {
             if (step.getString("videoURL") != null) {
                 videoUrl = step.getString("videoURL");
             }
-            Step actualStep = new Step(shortDescription, description, videoUrl);
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = Utils.retriveVideoFrameFromVideo(videoUrl);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            Step actualStep = new Step(shortDescription, description, videoUrl,imageBitmap);
+            Log.d(TAG, "getRecipeSteps: "+shortDescription);
             steps.add(actualStep);
         }
         Log.d(TAG, "recipes steps networks utils: " + recipeSteps);
         return steps;
+    }
+    public static Step getStepById(String json,String id){
+        return null;
     }
 
 }

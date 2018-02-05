@@ -11,13 +11,13 @@ import com.example.santiago.bakingapp.Model.Step;
 
 public class DetailsRecipeActivity extends AppCompatActivity implements IngredientsStepsFragment.OnStepClickListener {
     private static final String TAG = "DetailsRecipeActivity";
-
+    private String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
+        id = intent.getStringExtra("id");
         IngredientsStepsFragment fragment = new IngredientsStepsFragment();
         fragment.setRecipeId(getApplicationContext(),id);
         getSupportFragmentManager().beginTransaction().add(R.id.recipess,fragment).commit();
@@ -29,6 +29,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements Ingredie
         intent.putExtra("shortDescription",step.getShortDescription());
         intent.putExtra("description",step.getDescription());
         intent.putExtra("videoUrl",step.getVideoUrl());
+        intent.putExtra("id",id);
         startActivity(intent);
     }
 }
