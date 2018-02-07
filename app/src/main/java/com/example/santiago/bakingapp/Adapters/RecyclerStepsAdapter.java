@@ -61,7 +61,8 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
             holder.stepImageView.setImageBitmap(step.getImageBitmap());
         }else{
             holder.stepImageView.setVisibility(View.GONE);
-            //holder.sTepTextView.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.sTepTextView.setTextColor(R.color.gray);
+
         }
     }
 

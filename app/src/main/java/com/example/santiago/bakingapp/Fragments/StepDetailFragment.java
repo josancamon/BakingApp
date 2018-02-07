@@ -45,9 +45,22 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     private String stepDescriptionString;
     private String videoUrl;
     private ImageView nextImageView;
-
+    private ChangeStepClickListener changeStepClickListener;
     private static final String TAG = StepDetailFragment.class.getSimpleName();
     public StepDetailFragment(){}
+    public interface ChangeStepClickListener{
+        void changeStepClickListener(int sumToId);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            changeStepClickListener = (ChangeStepClickListener)context;
+        }catch (Exception e){
+            Log.d(TAG, "onAttach: "+e.getMessage());
+        }
+    }
 
     @Nullable
     @Override
@@ -94,7 +107,7 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onStop() {
         super.onStop();
-        simpleExoPlayer.stop();
+        //simpleExoPlayer.stop();
     }
     public void setStepData(String stepDescriptionReceived,String videoUrlReceived){
         if (videoUrlReceived!= null&& !videoUrlReceived.equals("")){

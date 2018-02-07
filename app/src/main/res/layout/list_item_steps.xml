@@ -27,6 +27,7 @@
             android:layout_gravity="bottom"
             android:padding="8dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+            android:textSize="24dp"
             android:textColor="#FFF"
             tools:text="Pie Recipe" />
     </FrameLayout>

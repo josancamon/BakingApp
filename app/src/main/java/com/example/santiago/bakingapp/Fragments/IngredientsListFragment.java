@@ -1,6 +1,6 @@
 package com.example.santiago.bakingapp.Fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +23,7 @@ import java.util.List;
 public class IngredientsListFragment extends Fragment {
     private String mRecipeId;
     public IngredientsListFragment(){}
+
 
     @Nullable
     @Override
