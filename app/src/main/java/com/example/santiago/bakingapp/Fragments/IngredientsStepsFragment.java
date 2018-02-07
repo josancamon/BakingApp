@@ -43,7 +43,8 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
     private OnStepClickListener onStepClickListener;
     private ProgressBar progressBar;
     private LinearLayout linearLayout;
-    public interface OnStepClickListener{
+
+    public interface OnStepClickListener {
         void onStepClickListener(Step step);
     }
 
@@ -52,10 +53,11 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
         super.onAttach(context);
         try {
             onStepClickListener = (OnStepClickListener) context;
-        }catch (Exception e){
-            Log.d(TAG, "onAttach Error: "+ e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, "onAttach Error: " + e.getMessage());
         }
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
@@ -76,8 +78,9 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
                 }
                 PopupWindow pw = new PopupWindow(layout, rootView.getWidth() - 35, 470, true);
                 pw.showAtLocation(layout, Gravity.CENTER, 0, 0);*/
-                 IngredientsDialogFragment ingredientsDialogFragment = new IngredientsDialogFragment();
-                ingredientsDialogFragment.show(getFragmentManager(),"prueba");
+                IngredientsDialogFragment ingredientsDialogFragment = new IngredientsDialogFragment();
+                ingredientsDialogFragment.setRecipeId(recipeId);
+                ingredientsDialogFragment.show(getFragmentManager(), "prueba");
                 /*AlertDialog.Builder alert = new AlertDialog.Builder(container.getContext());
                 View vie2w = getLayoutInflater().inflate(R.layout.fragment_ingredients_list,null);
                 alert.setView(vie2w);
@@ -95,7 +98,8 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
         loadData();
         return rootView;
     }
-    private void loadData(){
+
+    private void loadData() {
         LoaderManager loaderManager = getLoaderManager();
         Loader<List<Step>> loader = loaderManager.getLoader(LOADER_ID);
 

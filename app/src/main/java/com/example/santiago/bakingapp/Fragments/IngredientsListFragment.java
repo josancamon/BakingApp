@@ -29,7 +29,7 @@ public class IngredientsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_ingredients_list,container,false);
-        RecyclerView recyclerView = rootView.findViewById(R.id.ingredietsRecycler);
+        RecyclerView recyclerView = rootView.findViewById(R.id.ingrediets_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
