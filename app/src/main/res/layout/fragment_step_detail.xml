@@ -43,7 +43,7 @@
 
 
     <ImageView
-        android:id="@+id/next_video"
+        android:id="@+id/previous_video"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginBottom="16dp"
@@ -53,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/previous_video"
+        android:id="@+id/next_video"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginBottom="16dp"

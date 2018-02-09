@@ -3,13 +3,13 @@ package com.example.santiago.bakingapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.santiago.bakingapp.Fragments.IngredientsStepsFragment;
+import com.example.santiago.bakingapp.Fragments.IngredientsStepsViewPagerFragment;
+import com.example.santiago.bakingapp.Fragments.StepsListFragment;
+import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.Model.Step;
 
-public class DetailsRecipeActivity extends AppCompatActivity implements IngredientsStepsFragment.OnStepClickListener {
+public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
     private static final String TAG = "DetailsRecipeActivity";
     private String id;
     @Override
@@ -18,8 +18,8 @@ public class DetailsRecipeActivity extends AppCompatActivity implements Ingredie
         setContentView(R.layout.activity_details_recipe);
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
-        IngredientsStepsFragment fragment = new IngredientsStepsFragment();
-        fragment.setRecipeId(getApplicationContext(),id);
+        IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
+        fragment.setRecipeId(id);
         getSupportFragmentManager().beginTransaction().add(R.id.recipess,fragment).commit();
     }
 
@@ -29,7 +29,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements Ingredie
         intent.putExtra("shortDescription",step.getShortDescription());
         intent.putExtra("description",step.getDescription());
         intent.putExtra("videoUrl",step.getVideoUrl());
-        intent.putExtra("id",id);
+        intent.putExtra("id",step.getStepId());
         startActivity(intent);
     }
 }

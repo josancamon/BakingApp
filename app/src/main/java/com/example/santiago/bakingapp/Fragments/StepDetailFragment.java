@@ -1,7 +1,6 @@
 package com.example.santiago.bakingapp.Fragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Model.Step;
 import com.example.santiago.bakingapp.R;
+import com.example.santiago.bakingapp.Utilities.NetworkUtils;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -34,6 +35,8 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import org.json.JSONException;
+
 /**
  * Created by Santiago on 29/01/2018.
  */
@@ -46,10 +49,12 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     private String videoUrl;
     private ImageView nextImageView;
     private ChangeStepClickListener changeStepClickListener;
+    private int stepId;
     private static final String TAG = StepDetailFragment.class.getSimpleName();
+    private static final int LOADER_ID = 1;
     public StepDetailFragment(){}
     public interface ChangeStepClickListener{
-        void changeStepClickListener(int sumToId);
+        void changeStepClickListener(Step step);
     }
 
     @Override
@@ -70,7 +75,9 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StepDetailFragment detailFragment = new StepDetailFragment();
+               stepId++;
+                Toast.makeText(getActivity(),String.valueOf(stepId),Toast.LENGTH_SHORT).show();
+                loadData();
                 //detailFragment.setStepData();
             }
         });
@@ -88,6 +95,47 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
         return rootView;
     }
 
+    public void loadData(){
+        LoaderManager loaderManager = getLoaderManager();
+        Loader<Step> loader = getLoaderManager().getLoader(1);
+        if (loader == null) {
+            loaderManager.initLoader(LOADER_ID, null, this);
+        } else {
+            loaderManager.restartLoader(LOADER_ID, null, this);
+        }
+    }
+    @Override
+    public Loader<Step> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Step>(getActivity()) {
+            @Override
+            protected void onStartLoading() {
+                forceLoad();
+                simpleExoPlayer.stop();
+            }
+
+            @Override
+            public Step loadInBackground() {
+                try {
+                    Step step = NetworkUtils.getStepById(stepId);
+                    return step;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        };
+    }//3105645037
+
+    @Override
+    public void onLoadFinished(Loader<Step> loader, Step data) {
+        Toast.makeText(getActivity(),data.getShortDescription(),Toast.LENGTH_SHORT).show();
+        changeStepClickListener.changeStepClickListener(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Step> loader) {
+
+    }
     private void initializePlayer(Uri uri){
         if (simpleExoPlayer == null) {
             // Create an instance of the ExoPlayer.
@@ -107,7 +155,9 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onStop() {
         super.onStop();
-        //simpleExoPlayer.stop();
+        if (!videoUrl.equals("")){
+            simpleExoPlayer.stop();
+        }
     }
     public void setStepData(String stepDescriptionReceived,String videoUrlReceived){
         if (videoUrlReceived!= null&& !videoUrlReceived.equals("")){
@@ -116,26 +166,5 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
             videoUrl = "";
         }
         stepDescriptionString = stepDescriptionReceived;
-    }
-
-    @Override
-    public Loader<Step> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Step>(getActivity()) {
-            @Override
-            public Step loadInBackground() {
-                Step step;
-                return null;
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Step> loader, Step data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Step> loader) {
-
     }
 }

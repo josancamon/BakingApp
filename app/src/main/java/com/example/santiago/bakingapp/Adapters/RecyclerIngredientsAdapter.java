@@ -1,6 +1,7 @@
 package com.example.santiago.bakingapp.Adapters;
 
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +29,13 @@ public class RecyclerIngredientsAdapter  extends RecyclerView.Adapter<RecyclerIn
         public TextView quantity;
         public TextView measure;
         public TextView ingredientName;
+        public TextView listItemNumber;
         public IngredientsViewHolder(View itemView) {
             super(itemView);
             quantity = itemView.findViewById(R.id.ingredient_quantity);
             measure = itemView.findViewById(R.id.ingredient_measure);
             ingredientName = itemView.findViewById(R.id.ingredient_name);
+            //listItemNumber = itemView.findViewById(R.id.ingredient_list_item);
 
         }
     }
@@ -49,6 +52,7 @@ public class RecyclerIngredientsAdapter  extends RecyclerView.Adapter<RecyclerIn
         holder.quantity.setText(actualIngredient.getQuantity());
         holder.measure.setText(actualIngredient.getMeasure());
         holder.ingredientName.setText(actualIngredient.getIngredient());
+     //   holder.listItemNumber.setText(String.valueOf(position+1));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.santiago.bakingapp.Fragments;
 
-import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -30,19 +29,17 @@ import java.util.List;
  * Created by Santiago on 28/01/2018.
  */
 
-public class IngredientsStepsFragment extends Fragment implements RecyclerStepsAdapter.StepOnclickListener, LoaderManager.LoaderCallbacks<List<Step>> {
+public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.StepOnclickListener, LoaderManager.LoaderCallbacks<List<Step>> {
 
-    public IngredientsStepsFragment() {
+    public StepsListFragment() {
     }
 
-    private static final String TAG = IngredientsStepsFragment.class.getSimpleName();
+    private static final String TAG = StepsListFragment.class.getSimpleName();
     private String recipeId;
     private RecyclerView recyclerView;
     private RecyclerStepsAdapter recyclerStepsAdapter;
     private static final int LOADER_ID = 1;
     private OnStepClickListener onStepClickListener;
-    private ProgressBar progressBar;
-    private LinearLayout linearLayout;
 
     public interface OnStepClickListener {
         void onStepClickListener(Step step);
@@ -61,39 +58,12 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_ingredients_and_steps, container, false);
-        progressBar = rootView.findViewById(R.id.progress_bar_steps);
-        progressBar.setVisibility(View.GONE);
-        linearLayout = rootView.findViewById(R.id.ingredients_steps_fragment);
-        linearLayout.setVisibility(View.INVISIBLE);
-        CardView ingredientsCardView = rootView.findViewById(R.id.ingredients_card_view);
-        ingredientsCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               /* LayoutInflater inflaterPopUpWindow = (LayoutInflater) container.getContext()
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View layout = null;
-                if (inflaterPopUpWindow != null) {
-                    layout = inflaterPopUpWindow.inflate(R.layout.fragment_ingredients_list_pop_up, container, false);
-                }
-                PopupWindow pw = new PopupWindow(layout, rootView.getWidth() - 35, 470, true);
-                pw.showAtLocation(layout, Gravity.CENTER, 0, 0);*/
-                IngredientsDialogFragment ingredientsDialogFragment = new IngredientsDialogFragment();
-                ingredientsDialogFragment.setRecipeId(recipeId);
-                ingredientsDialogFragment.show(getFragmentManager(), "prueba");
-                /*AlertDialog.Builder alert = new AlertDialog.Builder(container.getContext());
-                View vie2w = getLayoutInflater().inflate(R.layout.fragment_ingredients_list,null);
-                alert.setView(vie2w);
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();*/
-
-            }
-        });
+        final View rootView = LayoutInflater.from(getActivity() ).inflate(R.layout.fragment_steps_list, container, false);
         recyclerView = rootView.findViewById(R.id.steps_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerStepsAdapter = new RecyclerStepsAdapter(container.getContext(), this);
+        recyclerStepsAdapter = new RecyclerStepsAdapter(getActivity(), this);
         recyclerView.setAdapter(recyclerStepsAdapter);
         loadData();
         return rootView;
@@ -104,7 +74,6 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
         Loader<List<Step>> loader = loaderManager.getLoader(LOADER_ID);
 
         if (loader == null) {
-            progressBar.setVisibility(View.VISIBLE);
             loaderManager.initLoader(LOADER_ID, null, this);
         } else {
             loaderManager.restartLoader(LOADER_ID, null, this);
@@ -117,7 +86,7 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
         //Toast.makeText(getActivity(),stepClicked.getShortDescription(),Toast.LENGTH_SHORT).show();
     }
 
-    public void setRecipeId(Context context, String recipeId) {
+    public void setRecipeId(String recipeId) {
         this.recipeId = recipeId;
     }
 
@@ -146,8 +115,6 @@ public class IngredientsStepsFragment extends Fragment implements RecyclerStepsA
     @Override
     public void onLoadFinished(Loader<List<Step>> loader, List<Step> data) {
         recyclerStepsAdapter.setData(data);
-        progressBar.setVisibility(View.GONE);
-        linearLayout.setVisibility(View.VISIBLE);
     }
 
 

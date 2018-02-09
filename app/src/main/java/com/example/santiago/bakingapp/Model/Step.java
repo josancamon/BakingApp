@@ -7,16 +7,21 @@ import android.graphics.Bitmap;
  */
 
 public class Step {
+    private int mStepId;
     private String mShortDescription;
     private String mDescription;
     private String mVideoUrl;
     private Bitmap mImageBitmap;
 
-    public Step(String shortDescription, String description, String videoUrl, Bitmap imageBitmap) {
+    public Step(int stepId,String shortDescription, String description, String videoUrl, Bitmap imageBitmap) {
+        mStepId = stepId;
         mShortDescription = shortDescription;
         mDescription = description;
         mVideoUrl = videoUrl;
         mImageBitmap = imageBitmap;
+    }
+    public int getStepId() {
+        return mStepId;
     }
 
     public String getShortDescription() {

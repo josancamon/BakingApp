@@ -31,7 +31,7 @@ import static android.content.ContentValues.TAG;
 
 public final class NetworkUtils {
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
-
+    private static JSONArray  mRecipesSteps;
     public static URL createUrl() {
         Uri uri = Uri.parse(BASE_URL).buildUpon().build();
         URL url = null;
@@ -106,6 +106,7 @@ public final class NetworkUtils {
         JSONArray jsonIntialArray = new JSONArray(json);
         JSONObject recipe = jsonIntialArray.getJSONObject(Integer.valueOf(id) - 1);
         JSONArray recipeSteps = recipe.getJSONArray("steps");
+        mRecipesSteps = recipeSteps;
         for (int i = 0; i < recipeSteps.length(); i++) {
             JSONObject step = recipeSteps.getJSONObject(i);
             String shortDescription = step.getString("shortDescription");
@@ -121,15 +122,30 @@ public final class NetworkUtils {
                 throwable.printStackTrace();
             }
 
-            Step actualStep = new Step(shortDescription, description, videoUrl,imageBitmap);
+            Step actualStep = new Step(i+1,shortDescription, description, videoUrl,imageBitmap);
             Log.d(TAG, "getRecipeSteps: "+shortDescription);
             steps.add(actualStep);
         }
         Log.d(TAG, "recipes steps networks utils: " + recipeSteps);
         return steps;
     }
-    public static Step getStepById(String json,String id){
-        return null;
+    public static Step getStepById(int id) throws JSONException {
+       JSONObject step =(JSONObject) mRecipesSteps.get(id);
+        String shortDescription = step.getString("shortDescription");
+        String description = step.getString("description");
+        String videoUrl = "";
+        if (step.getString("videoURL") != null) {
+            videoUrl = step.getString("videoURL");
+        }
+        Bitmap imageBitmap = null;
+        try {
+            imageBitmap = Utils.retriveVideoFrameFromVideo(videoUrl);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+        Step actualStep = new Step(id,shortDescription, description, videoUrl,imageBitmap);
+        return actualStep;
     }
 
 }
