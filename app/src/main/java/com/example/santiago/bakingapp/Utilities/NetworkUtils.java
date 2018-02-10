@@ -32,6 +32,7 @@ import static android.content.ContentValues.TAG;
 public final class NetworkUtils {
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
     private static JSONArray  mRecipesSteps;
+    private static JSONArray completeJson;
     public static URL createUrl() {
         Uri uri = Uri.parse(BASE_URL).buildUpon().build();
         URL url = null;
@@ -87,6 +88,7 @@ public final class NetworkUtils {
     public static List<Ingredient> getRecipeIngredients(Context context, String json, String id) throws JSONException {
         List<Ingredient> ingredients = new ArrayList<>();
         JSONArray jsonIntialArray = new JSONArray(json);
+        completeJson = jsonIntialArray;
         JSONObject recipe = jsonIntialArray.getJSONObject(Integer.valueOf(id) - 1);
         JSONArray recipeIngredients = recipe.getJSONArray("ingredients");
         for (int i = 0; i < recipeIngredients.length(); i++) {

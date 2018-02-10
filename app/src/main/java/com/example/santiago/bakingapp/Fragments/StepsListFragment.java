@@ -58,12 +58,12 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = LayoutInflater.from(getActivity() ).inflate(R.layout.fragment_steps_list, container, false);
+        final View rootView = inflater.from(container.getContext() ).inflate(R.layout.fragment_steps_list, container, false);
         recyclerView = rootView.findViewById(R.id.steps_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerStepsAdapter = new RecyclerStepsAdapter(getActivity(), this);
+        recyclerStepsAdapter = new RecyclerStepsAdapter(container.getContext(), this);
         recyclerView.setAdapter(recyclerStepsAdapter);
         loadData();
         return rootView;

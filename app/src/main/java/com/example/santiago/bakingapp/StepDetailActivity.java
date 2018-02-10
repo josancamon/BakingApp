@@ -39,7 +39,7 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         Toast.makeText(getApplicationContext(),description,Toast.LENGTH_SHORT).show();
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
         stepDetailFragment.setStepData(description,videoUrl);
-        getSupportFragmentManager().beginTransaction().replace(R.id.rec,stepDetailFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.rec,stepDetailFragment).commit();
 
     }
 }

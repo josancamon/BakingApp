@@ -11,13 +11,12 @@ import com.example.santiago.bakingapp.Model.Step;
 
 public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
     private static final String TAG = "DetailsRecipeActivity";
-    private String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
         Intent intent = getIntent();
-        id = intent.getStringExtra("id");
+        String id = intent.getStringExtra("id");
         IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
         fragment.setRecipeId(id);
         getSupportFragmentManager().beginTransaction().add(R.id.recipess,fragment).commit();
