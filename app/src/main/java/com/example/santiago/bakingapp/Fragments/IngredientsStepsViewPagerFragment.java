@@ -22,12 +22,11 @@ public class IngredientsStepsViewPagerFragment extends Fragment {
     private ViewPager viewPager;
     private String mRecipeId;
     private ProgressBar progressBar;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients_and_steps_view_pager, container, false);
-        progressBar = rootView.findViewById(R.id.progress_bar);
+        progressBar= rootView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         viewPager = rootView.findViewById(R.id.ingredients_steps_view_pager);
         MyPagerAdapter adapterViewPager = new MyPagerAdapter(getFragmentManager());
@@ -61,11 +60,11 @@ public class IngredientsStepsViewPagerFragment extends Fragment {
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
                     IngredientsListFragment ingredientsListFragment = new IngredientsListFragment();
-                    ingredientsListFragment.setRecipeId(mRecipeId);
+                ingredientsListFragment.setRecipeId(mRecipeId);
                     return ingredientsListFragment;
                 case 1: // Fragment # 0 - This will show FirstFragment
                     StepsListFragment stepsListFragment = new StepsListFragment();
-                    stepsListFragment.setRecipeId(mRecipeId);
+                    stepsListFragment.setRecipeId(Integer.valueOf(mRecipeId));
                     return stepsListFragment;
                 default:
                     return null;

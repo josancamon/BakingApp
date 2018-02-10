@@ -103,10 +103,10 @@ public final class NetworkUtils {
         return ingredients;
     }
 
-    public static List<Step> getRecipeSteps(Context context, String json, String id) throws JSONException {
+    public static List<Step> getRecipeSteps(Context context, String json, int id) throws JSONException {
         List<Step> steps = new ArrayList<>();
         JSONArray jsonIntialArray = new JSONArray(json);
-        JSONObject recipe = jsonIntialArray.getJSONObject(Integer.valueOf(id) - 1);
+        JSONObject recipe = jsonIntialArray.getJSONObject(id - 1);
         JSONArray recipeSteps = recipe.getJSONArray("steps");
         mRecipesSteps = recipeSteps;
         for (int i = 0; i < recipeSteps.length(); i++) {

@@ -1,6 +1,7 @@
 package com.example.santiago.bakingapp;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,8 @@ import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Fragments.StepDetailFragment;
 import com.example.santiago.bakingapp.Model.Step;
+
+import java.util.List;
 
 public class StepDetailActivity extends AppCompatActivity implements StepDetailFragment.ChangeStepClickListener{
     private static final String TAG = StepDetailActivity.class.getSimpleName();
@@ -24,6 +27,9 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         description = intent.getStringExtra("description");
         videoUrl = intent.getStringExtra("videoUrl");
         mStepId = intent.getStringExtra("id");
+        //Step par = (Step) intent.getSerializableExtra("par");
+        //Step s = (Step) par;
+       // Log.d(TAG, "ssssssss "+s.getShortDescription());
 
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
         stepDetailFragment.setStepData(description,videoUrl);

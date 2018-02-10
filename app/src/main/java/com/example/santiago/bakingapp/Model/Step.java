@@ -2,11 +2,13 @@ package com.example.santiago.bakingapp.Model;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
  * Created by Santiago on 29/01/2018.
  */
 
-public class Step {
+public class Step implements Serializable{
     private int mStepId;
     private String mShortDescription;
     private String mDescription;

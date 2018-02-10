@@ -35,14 +35,15 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     }
 
     private static final String TAG = StepsListFragment.class.getSimpleName();
-    private String recipeId;
+    private int recipeId;
     private RecyclerView recyclerView;
     private RecyclerStepsAdapter recyclerStepsAdapter;
     private static final int LOADER_ID = 1;
     private OnStepClickListener onStepClickListener;
+    private List<Step> stepsList;
 
     public interface OnStepClickListener {
-        void onStepClickListener(Step step);
+        void onStepClickListener(Step step, List<Step> steps);
     }
 
     @Override
@@ -82,12 +83,15 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
     @Override
     public void onClick(Step stepClicked) {
-        onStepClickListener.onStepClickListener(stepClicked);
+        onStepClickListener.onStepClickListener(stepClicked, stepsList);
         //Toast.makeText(getActivity(),stepClicked.getShortDescription(),Toast.LENGTH_SHORT).show();
     }
 
-    public void setRecipeId(String recipeId) {
+    public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
+    }
+    public int get(){
+        return this.recipeId;
     }
 
     @Override
@@ -104,6 +108,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
                 try {
                     String json = NetworkUtils.makeHttpRequest(NetworkUtils.createUrl());
                     steps = NetworkUtils.getRecipeSteps(getContext(), json, recipeId);
+                    stepsList = steps;
                 } catch (Exception e) {
                     Log.d(TAG, "loadInBackground: " + e);
                 }

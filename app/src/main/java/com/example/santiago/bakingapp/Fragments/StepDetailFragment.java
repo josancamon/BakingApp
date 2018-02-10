@@ -37,11 +37,15 @@ import com.google.android.exoplayer2.util.Util;
 
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Santiago on 29/01/2018.
  */
 
-public class StepDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Step> {
+public class StepDetailFragment extends Fragment  {
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer simpleExoPlayer;
     private TextView stepDescription;
@@ -52,8 +56,11 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     private int stepId;
     private static final String TAG = StepDetailFragment.class.getSimpleName();
     private static final int LOADER_ID = 1;
-    public StepDetailFragment(){}
-    public interface ChangeStepClickListener{
+
+    public StepDetailFragment() {
+    }
+
+    public interface ChangeStepClickListener {
         void changeStepClickListener(Step step);
     }
 
@@ -61,31 +68,30 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            changeStepClickListener = (ChangeStepClickListener)context;
-        }catch (Exception e){
-            Log.d(TAG, "onAttach: "+e.getMessage());
+            changeStepClickListener = (ChangeStepClickListener) context;
+        } catch (Exception e) {
+            Log.d(TAG, "onAttach: " + e.getMessage());
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_step_detail,container,false);
+        View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_step_detail, container, false);
         nextImageView = rootView.findViewById(R.id.next_video);
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               stepId++;
-                Toast.makeText(getActivity(),String.valueOf(stepId),Toast.LENGTH_SHORT).show();
-                loadData();
+                stepId++;
+                Toast.makeText(getActivity(), String.valueOf(stepId), Toast.LENGTH_SHORT).show();
                 //detailFragment.setStepData();
             }
         });
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
-        if (!videoUrl.equals("")){
-            Uri uri =Uri.parse(videoUrl).buildUpon().build();
+        if (!videoUrl.equals("")) {
+            Uri uri = Uri.parse(videoUrl).buildUpon().build();
             initializePlayer(uri);
-        }else{
+        } else {
             Bitmap noVideoImage = BitmapFactory.decodeResource(getResources(), R.drawable.card_shadow);
             //simpleExoPlayerView.setDefaultArtwork(noVideoImage);
         }
@@ -94,49 +100,9 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
         stepDescription.setText(stepDescriptionString);
         return rootView;
     }
+    //3105645037
 
-    public void loadData(){
-        LoaderManager loaderManager = getLoaderManager();
-        Loader<Step> loader = getLoaderManager().getLoader(1);
-        if (loader == null) {
-            loaderManager.initLoader(LOADER_ID, null, this);
-        } else {
-            loaderManager.restartLoader(LOADER_ID, null, this);
-        }
-    }
-    @Override
-    public Loader<Step> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Step>(getActivity()) {
-            @Override
-            protected void onStartLoading() {
-                forceLoad();
-                simpleExoPlayer.stop();
-            }
-
-            @Override
-            public Step loadInBackground() {
-                try {
-                    Step step = NetworkUtils.getStepById(stepId);
-                    return step;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        };
-    }//3105645037
-
-    @Override
-    public void onLoadFinished(Loader<Step> loader, Step data) {
-        Toast.makeText(getActivity(),data.getShortDescription(),Toast.LENGTH_SHORT).show();
-        changeStepClickListener.changeStepClickListener(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Step> loader) {
-
-    }
-    private void initializePlayer(Uri uri){
+    private void initializePlayer(Uri uri) {
         if (simpleExoPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -155,14 +121,15 @@ public class StepDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onStop() {
         super.onStop();
-        if (!videoUrl.equals("")){
+        if (!videoUrl.equals("")) {
             simpleExoPlayer.stop();
         }
     }
-    public void setStepData(String stepDescriptionReceived,String videoUrlReceived){
-        if (videoUrlReceived!= null&& !videoUrlReceived.equals("")){
+
+    public void setStepData(String stepDescriptionReceived, String videoUrlReceived) {
+        if (videoUrlReceived != null && !videoUrlReceived.equals("")) {
             videoUrl = videoUrlReceived;
-        }else{
+        } else {
             videoUrl = "";
         }
         stepDescriptionString = stepDescriptionReceived;
