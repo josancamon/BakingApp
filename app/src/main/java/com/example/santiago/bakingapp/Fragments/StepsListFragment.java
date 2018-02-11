@@ -106,8 +106,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
             public List<Step> loadInBackground() {
                 List<Step> steps = new ArrayList<>();
                 try {
-                    String json = NetworkUtils.makeHttpRequest(NetworkUtils.createUrl());
-                    steps = NetworkUtils.getRecipeSteps(getContext(), json, recipeId);
+                    steps = NetworkUtils.getRecipeSteps(recipeId);
                     stepsList = steps;
                 } catch (Exception e) {
                     Log.d(TAG, "loadInBackground: " + e);

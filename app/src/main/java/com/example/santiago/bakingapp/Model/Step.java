@@ -1,6 +1,8 @@
 package com.example.santiago.bakingapp.Model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
@@ -8,20 +10,19 @@ import java.io.Serializable;
  * Created by Santiago on 29/01/2018.
  */
 
-public class Step implements Serializable{
+public class Step implements Parcelable {
     private int mStepId;
     private String mShortDescription;
     private String mDescription;
     private String mVideoUrl;
-    private Bitmap mImageBitmap;
 
-    public Step(int stepId,String shortDescription, String description, String videoUrl, Bitmap imageBitmap) {
+    public Step(int stepId, String shortDescription, String description, String videoUrl) {
         mStepId = stepId;
         mShortDescription = shortDescription;
         mDescription = description;
         mVideoUrl = videoUrl;
-        mImageBitmap = imageBitmap;
     }
+
     public int getStepId() {
         return mStepId;
     }
@@ -38,7 +39,38 @@ public class Step implements Serializable{
         return mVideoUrl;
     }
 
-    public Bitmap getImageBitmap() {
-        return mImageBitmap;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mStepId);
+        parcel.writeString(mShortDescription);
+        parcel.writeString(mDescription);
+        parcel.writeString(mVideoUrl);
+    }
+    private Step(Parcel in) {
+        mStepId = in.readInt();
+        mShortDescription = in.readString();
+        mDescription = in.readString();
+        mVideoUrl = in.readString();
+    }
+    public static final Parcelable.Creator<Step> CREATOR
+            = new Parcelable.Creator<Step>() {
+
+        // This simply calls our new constructor (typically private) and
+        // passes along the unmarshalled `Parcel`, and then returns the new object!
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        // We just need to copy this and change the type to match our class.
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
 }

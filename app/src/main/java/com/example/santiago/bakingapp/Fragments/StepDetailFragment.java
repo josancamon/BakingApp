@@ -45,23 +45,24 @@ import java.util.List;
  * Created by Santiago on 29/01/2018.
  */
 
-public class StepDetailFragment extends Fragment  {
+public class StepDetailFragment extends Fragment {
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer simpleExoPlayer;
     private TextView stepDescription;
     private String stepDescriptionString;
     private String videoUrl;
     private ImageView nextImageView;
+    private ImageView previousImageView;
     private ChangeStepClickListener changeStepClickListener;
-    private int stepId;
+    private int mStepIndex;
     private static final String TAG = StepDetailFragment.class.getSimpleName();
-    private static final int LOADER_ID = 1;
+    private List<Step> stepsList;
 
     public StepDetailFragment() {
     }
 
     public interface ChangeStepClickListener {
-        void changeStepClickListener(Step step);
+        void changeStepClickListener(int newId);
     }
 
     @Override
@@ -76,15 +77,28 @@ public class StepDetailFragment extends Fragment  {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_step_detail, container, false);
         nextImageView = rootView.findViewById(R.id.next_video);
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stepId++;
-                Toast.makeText(getActivity(), String.valueOf(stepId), Toast.LENGTH_SHORT).show();
-                //detailFragment.setStepData();
+                if (mStepIndex + 1 == stepsList.size()) {
+                    Toast.makeText(container.getContext(), "Recipe Completed", Toast.LENGTH_SHORT).show();
+                } else {
+                    changeStepClickListener.changeStepClickListener(mStepIndex + 1);
+                }
+            }
+        });
+        previousImageView = rootView.findViewById(R.id.previous_video);
+        previousImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mStepIndex == 0) {
+                    Toast.makeText(container.getContext(), "This is the first Step", Toast.LENGTH_SHORT).show();
+                } else {
+                    changeStepClickListener.changeStepClickListener(mStepIndex - 1);
+                }
             }
         });
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
@@ -93,7 +107,6 @@ public class StepDetailFragment extends Fragment  {
             initializePlayer(uri);
         } else {
             Bitmap noVideoImage = BitmapFactory.decodeResource(getResources(), R.drawable.card_shadow);
-            //simpleExoPlayerView.setDefaultArtwork(noVideoImage);
         }
         //needed to get the video url and the description by an intent
         stepDescription = rootView.findViewById(R.id.step_description);
@@ -126,12 +139,18 @@ public class StepDetailFragment extends Fragment  {
         }
     }
 
-    public void setStepData(String stepDescriptionReceived, String videoUrlReceived) {
-        if (videoUrlReceived != null && !videoUrlReceived.equals("")) {
-            videoUrl = videoUrlReceived;
+    public void setStepList(List<Step> stepss) {
+        stepsList = stepss;
+    }
+
+    public void setStepData(int stepId) {
+        mStepIndex = stepId - 1;
+        Step actualStep = stepsList.get(mStepIndex);
+        if (actualStep.getVideoUrl() != null && !actualStep.getVideoUrl().equals("")) {
+            videoUrl = actualStep.getVideoUrl();
         } else {
             videoUrl = "";
         }
-        stepDescriptionString = stepDescriptionReceived;
+        stepDescriptionString = actualStep.getDescription();
     }
 }

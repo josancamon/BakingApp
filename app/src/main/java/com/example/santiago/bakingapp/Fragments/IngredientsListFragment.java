@@ -61,8 +61,7 @@ public class IngredientsListFragment extends Fragment implements LoaderManager.L
             public List<Ingredient> loadInBackground() {
                 List<Ingredient> ingredients = new ArrayList<>();
                 try {
-                    String json = NetworkUtils.makeHttpRequest(NetworkUtils.createUrl());
-                    ingredients = NetworkUtils.getRecipeIngredients(getContext(),json,mRecipeId);
+                    ingredients = NetworkUtils.getRecipeIngredients(mRecipeId);
                 }catch (Exception e){
                     Log.d(TAG, "Error loadinBackground: "+e.getMessage());
                 }

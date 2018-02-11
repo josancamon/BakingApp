@@ -31,8 +31,9 @@ import static android.content.ContentValues.TAG;
 
 public final class NetworkUtils {
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
-    private static JSONArray  mRecipesSteps;
+    private static JSONArray mRecipesSteps;
     private static JSONArray completeJson;
+
     public static URL createUrl() {
         Uri uri = Uri.parse(BASE_URL).buildUpon().build();
         URL url = null;
@@ -63,21 +64,22 @@ public final class NetworkUtils {
     public static List<Recipe> getJsonRecipes(Context context, String json) throws JSONException {
         List<Recipe> recipes = new ArrayList<>();
         JSONArray jsonIntialArray = new JSONArray(json);
+        completeJson = jsonIntialArray;
         for (int i = 0; i < jsonIntialArray.length(); i++) {
             JSONObject recipe = jsonIntialArray.getJSONObject(i);
             String recipeId = recipe.getString("id");
             String recipeName = recipe.getString("name");
             String recipeServings = String.valueOf(recipe.getInt("servings"));
             JSONArray recipeSteps = recipe.getJSONArray("steps");
-            JSONObject step = recipeSteps.getJSONObject(recipeSteps.length()-1);
+            JSONObject step = recipeSteps.getJSONObject(recipeSteps.length() - 1);
             String videoUrl = step.getString("videoURL");
-            Bitmap bitmapImage= null;
+            Bitmap bitmapImage = null;
             try {
                 bitmapImage = Utils.retriveVideoFrameFromVideo(videoUrl);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
-            Recipe actualRecipe = new Recipe(recipeId, recipeName, recipeServings,bitmapImage);
+            Recipe actualRecipe = new Recipe(recipeId, recipeName, recipeServings, bitmapImage);
             //Log.d(TAG, "getJsonRecipes: " + actualRecipe.getRecipeName());
             recipes.add(actualRecipe);
         }
@@ -85,11 +87,9 @@ public final class NetworkUtils {
         return recipes;
     }
 
-    public static List<Ingredient> getRecipeIngredients(Context context, String json, String id) throws JSONException {
+    public static List<Ingredient> getRecipeIngredients(String id) throws JSONException {
         List<Ingredient> ingredients = new ArrayList<>();
-        JSONArray jsonIntialArray = new JSONArray(json);
-        completeJson = jsonIntialArray;
-        JSONObject recipe = jsonIntialArray.getJSONObject(Integer.valueOf(id) - 1);
+        JSONObject recipe = completeJson.getJSONObject(Integer.valueOf(id) - 1);
         JSONArray recipeIngredients = recipe.getJSONArray("ingredients");
         for (int i = 0; i < recipeIngredients.length(); i++) {
             JSONObject ingredient = recipeIngredients.getJSONObject(i);
@@ -103,10 +103,9 @@ public final class NetworkUtils {
         return ingredients;
     }
 
-    public static List<Step> getRecipeSteps(Context context, String json, int id) throws JSONException {
+    public static List<Step> getRecipeSteps(int id) throws JSONException {
         List<Step> steps = new ArrayList<>();
-        JSONArray jsonIntialArray = new JSONArray(json);
-        JSONObject recipe = jsonIntialArray.getJSONObject(id - 1);
+        JSONObject recipe = completeJson.getJSONObject(id - 1);
         JSONArray recipeSteps = recipe.getJSONArray("steps");
         mRecipesSteps = recipeSteps;
         for (int i = 0; i < recipeSteps.length(); i++) {
@@ -117,37 +116,12 @@ public final class NetworkUtils {
             if (step.getString("videoURL") != null) {
                 videoUrl = step.getString("videoURL");
             }
-            Bitmap imageBitmap = null;
-            try {
-                imageBitmap = Utils.retriveVideoFrameFromVideo(videoUrl);
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-
-            Step actualStep = new Step(i+1,shortDescription, description, videoUrl,imageBitmap);
-            Log.d(TAG, "getRecipeSteps: "+shortDescription);
+            Step actualStep = new Step(i + 1, shortDescription, description, videoUrl);
+            Log.d(TAG, "getRecipeSteps: " + shortDescription);
             steps.add(actualStep);
         }
         Log.d(TAG, "recipes steps networks utils: " + recipeSteps);
         return steps;
-    }
-    public static Step getStepById(int id) throws JSONException {
-       JSONObject step =(JSONObject) mRecipesSteps.get(id);
-        String shortDescription = step.getString("shortDescription");
-        String description = step.getString("description");
-        String videoUrl = "";
-        if (step.getString("videoURL") != null) {
-            videoUrl = step.getString("videoURL");
-        }
-        Bitmap imageBitmap = null;
-        try {
-            imageBitmap = Utils.retriveVideoFrameFromVideo(videoUrl);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-
-        Step actualStep = new Step(id,shortDescription, description, videoUrl,imageBitmap);
-        return actualStep;
     }
 
 }

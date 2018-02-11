@@ -30,12 +30,12 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
 
     @Override
     public void onStepClickListener(Step step , List<Step> steps) {
-        Log.d(TAG, "onStepClickListener: "+ steps);
         Intent intent = new Intent(this,StepDetailActivity.class);
         intent.putExtra("shortDescription",step.getShortDescription());
         intent.putExtra("description",step.getDescription());
         intent.putExtra("videoUrl",step.getVideoUrl());
         intent.putExtra("id",step.getStepId());
+        intent.putParcelableArrayListExtra("steps_extra", (ArrayList<? extends Parcelable>) steps);
         startActivity(intent);
     }
 }

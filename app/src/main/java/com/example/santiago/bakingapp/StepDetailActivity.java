@@ -5,6 +5,8 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Fragments.StepDetailFragment;
@@ -17,7 +19,8 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
     private String shortDescription;
     private String description;
     private String videoUrl;
-    private String mStepId;
+    private int mStepId;
+    private List<Step> stepsList;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -26,26 +29,25 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         shortDescription = intent.getStringExtra("shortDescription");
         description = intent.getStringExtra("description");
         videoUrl = intent.getStringExtra("videoUrl");
-        mStepId = intent.getStringExtra("id");
-        //Step par = (Step) intent.getSerializableExtra("par");
-        //Step s = (Step) par;
-       // Log.d(TAG, "ssssssss "+s.getShortDescription());
+        mStepId = intent.getIntExtra("id",0);
+        stepsList=intent.getParcelableArrayListExtra("steps_extra");
 
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
-        stepDetailFragment.setStepData(description,videoUrl);
+        stepDetailFragment.setStepList(stepsList);
+        stepDetailFragment.setStepData(mStepId);
         getSupportFragmentManager().beginTransaction().add(R.id.rec,stepDetailFragment).commit();
 
-        Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
+        //Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
     }
 
     @Override
-    public void changeStepClickListener(Step step) {
-        String description = step.getDescription();
-        String videoUrl = step.getVideoUrl();
-        Toast.makeText(getApplicationContext(),description,Toast.LENGTH_SHORT).show();
+    public void changeStepClickListener(int newInt) {
+        int step = newInt+1;
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
-        stepDetailFragment.setStepData(description,videoUrl);
-        getSupportFragmentManager().beginTransaction().add(R.id.rec,stepDetailFragment).commit();
+        stepDetailFragment.setStepList(stepsList);
+        stepDetailFragment.setStepData(step);
+        getSupportFragmentManager().beginTransaction().replace(R.id.rec,stepDetailFragment).commit();
+
 
     }
 }
