@@ -1,5 +1,6 @@
 package com.example.santiago.bakingapp.Fragments;
 
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +38,8 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     OnRecipeClickListener onRecipeClickListener;
     private static final int LOADER_ID = 1;
     private ProgressBar progressBar;
+    private List<Recipe> recipes;
+
     public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipeClicked);
     }
@@ -60,8 +64,15 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         progressBar = rootView.findViewById(R.id.progress_bar_recipes);
         progressBar.setVisibility(View.GONE);
         recyclerView = rootView.findViewById(R.id.recycler_recipes);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == 2) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(container.getContext(), 2);
+            recyclerView.setLayoutManager(gridLayoutManager);
+        } else if (orientation == 1) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
+        }
         recyclerView.setHasFixedSize(true);
         recyclerRecipesAdapter = new RecyclerRecipesAdapter(container.getContext(), this);
         recyclerView.setAdapter(recyclerRecipesAdapter);
@@ -69,21 +80,17 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         loadData();
         return rootView;
     }
-    private void loadData(){
-        LoaderManager loaderManager = getLoaderManager();
-        Loader<List<Recipe>> loader = loaderManager.getLoader(LOADER_ID);
 
-        if (loader == null) {
-            progressBar.setVisibility(View.VISIBLE);
-            loaderManager.initLoader(LOADER_ID, null, this);
-        } else {
-            loaderManager.restartLoader(LOADER_ID, null, this);
-        }
+    private void loadData() {
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(LOADER_ID,null,this);
     }
+
     @Override
     public void onClick(Recipe recipeClicked) {
         onRecipeClickListener.onRecipeClick(recipeClicked);
     }
+
     @Override
     public Loader<List<Recipe>> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<List<Recipe>>(getContext()) {
@@ -94,12 +101,12 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
 
             @Override
             public List<Recipe> loadInBackground() {
-                List<Recipe> recipes = new ArrayList<>();
+                recipes = new ArrayList<>();
                 try {
                     String json = NetworkUtils.makeHttpRequest(NetworkUtils.createUrl());
-                    recipes = NetworkUtils.getJsonRecipes(getContext(),json);
+                    recipes = NetworkUtils.getJsonRecipes(getContext(), json);
                 } catch (Exception e) {
-                    Log.e(TAG, "error inload in background: "+ e.getMessage());
+                    Log.e(TAG, "error inload in background: " + e.getMessage());
                 }
                 return recipes;
             }
@@ -117,5 +124,8 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
 
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

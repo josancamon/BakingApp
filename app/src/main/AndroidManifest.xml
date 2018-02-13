@@ -19,7 +19,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailsRecipeActivity" />
-        <activity android:name=".StepDetailActivity" />
+        <activity
+            android:name=".StepDetailActivity"
+            android:label="Step details"
+            android:parentActivityName=".DetailsRecipeActivity"
+            android:theme="@style/AppThemeUp">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StepDetailActivity" />
+        </activity>
     </application>
 
 </manifest>

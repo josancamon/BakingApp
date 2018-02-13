@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -61,8 +62,15 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.from(container.getContext() ).inflate(R.layout.fragment_steps_list, container, false);
         recyclerView = rootView.findViewById(R.id.steps_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == 2) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(container.getContext(), 2   );
+            recyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
+        }
         recyclerView.setHasFixedSize(true);
         recyclerStepsAdapter = new RecyclerStepsAdapter(container.getContext(), this);
         recyclerView.setAdapter(recyclerStepsAdapter);

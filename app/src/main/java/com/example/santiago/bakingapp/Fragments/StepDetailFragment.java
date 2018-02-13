@@ -1,5 +1,6 @@
 package com.example.santiago.bakingapp.Fragments;
 
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +108,6 @@ public class StepDetailFragment extends Fragment {
             Uri uri = Uri.parse(videoUrl).buildUpon().build();
             initializePlayer(uri);
         } else {
-            Bitmap noVideoImage = BitmapFactory.decodeResource(getResources(), R.drawable.card_shadow);
         }
         //needed to get the video url and the description by an intent
         stepDescription = rootView.findViewById(R.id.step_description);

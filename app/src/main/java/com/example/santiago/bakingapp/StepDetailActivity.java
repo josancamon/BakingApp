@@ -1,13 +1,18 @@
 package com.example.santiago.bakingapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Parcelable;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.santiago.bakingapp.Fragments.StepDetailFragment;
 import com.example.santiago.bakingapp.Model.Step;
@@ -36,7 +41,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         stepDetailFragment.setStepList(stepsList);
         stepDetailFragment.setStepData(mStepId);
         getSupportFragmentManager().beginTransaction().add(R.id.rec,stepDetailFragment).commit();
-
         //Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
     }
 
