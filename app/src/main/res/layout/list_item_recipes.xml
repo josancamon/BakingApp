@@ -28,6 +28,12 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
                 android:textColor="#FFF"
                 tools:text="Pie Recipe" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/add_logo"
+                android:layout_gravity="bottom|right"
+                android:padding="10dp"/>
             <TextView
                 android:id="@+id/recipe_servings"
                 android:layout_width="wrap_content"

@@ -96,7 +96,9 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         return new AsyncTaskLoader<List<Recipe>>(getContext()) {
             @Override
             protected void onStartLoading() {
+                progressBar.setVisibility(View.VISIBLE);
                 forceLoad();
+
             }
 
             @Override
@@ -124,8 +126,4 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }

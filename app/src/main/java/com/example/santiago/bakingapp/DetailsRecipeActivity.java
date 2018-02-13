@@ -2,6 +2,7 @@ package com.example.santiago.bakingapp;
 
 import android.content.Intent;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,4 +39,5 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
         intent.putParcelableArrayListExtra("steps_extra", (ArrayList<? extends Parcelable>) steps);
         startActivity(intent);
     }
+
 }
