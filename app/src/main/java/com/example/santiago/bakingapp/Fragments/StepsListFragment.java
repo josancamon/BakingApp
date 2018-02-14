@@ -65,7 +65,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == 2) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(container.getContext(), 2   );
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(container.getContext(), 2);
             recyclerView.setLayoutManager(gridLayoutManager);
         } else {
             LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -80,26 +80,16 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
     private void loadData() {
         LoaderManager loaderManager = getLoaderManager();
-        Loader<List<Step>> loader = loaderManager.getLoader(LOADER_ID);
-
-        if (loader == null) {
-            loaderManager.initLoader(LOADER_ID, null, this);
-        } else {
-            loaderManager.restartLoader(LOADER_ID, null, this);
-        }
+       loaderManager.initLoader(LOADER_ID,null,this);
     }
 
     @Override
     public void onClick(Step stepClicked) {
         onStepClickListener.onStepClickListener(stepClicked, stepsList);
-        //Toast.makeText(getActivity(),stepClicked.getShortDescription(),Toast.LENGTH_SHORT).show();
     }
 
-    public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
-    }
-    public int get(){
-        return this.recipeId;
+    public void setRecipeId(int id) {
+        recipeId = id;
     }
 
     @Override

@@ -52,6 +52,5 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         stepDetailFragment.setStepData(step);
         getSupportFragmentManager().beginTransaction().replace(R.id.rec,stepDetailFragment).commit();
 
-
     }
 }

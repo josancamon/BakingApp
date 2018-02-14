@@ -17,7 +17,7 @@ import java.util.List;
 
 public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
     private static final String TAG = "DetailsRecipeActivity";
-
+    private List<Step> mSteps = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +33,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
 
     @Override
     public void onStepClickListener(Step step, List<Step> steps) {
+        mSteps = steps;
         Intent intent = new Intent(this, StepDetailActivity.class);
         intent.putExtra("shortDescription", step.getShortDescription());
         intent.putExtra("description", step.getDescription());
