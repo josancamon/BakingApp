@@ -22,22 +22,28 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
-        fragment.setRecipeId(id);
-        getSupportFragmentManager().beginTransaction().add(R.id.recipess,fragment).commit();
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            String id = intent.getStringExtra("id");
+            IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
+            fragment.setRecipeId(id);
+            getSupportFragmentManager().beginTransaction().add(R.id.recipess, fragment).commit();
+        }
     }
 
     @Override
-    public void onStepClickListener(Step step , List<Step> steps) {
-        Intent intent = new Intent(this,StepDetailActivity.class);
-        intent.putExtra("shortDescription",step.getShortDescription());
-        intent.putExtra("description",step.getDescription());
-        intent.putExtra("videoUrl",step.getVideoUrl());
-        intent.putExtra("id",step.getStepId());
+    public void onStepClickListener(Step step, List<Step> steps) {
+        Intent intent = new Intent(this, StepDetailActivity.class);
+        intent.putExtra("shortDescription", step.getShortDescription());
+        intent.putExtra("description", step.getDescription());
+        intent.putExtra("videoUrl", step.getVideoUrl());
+        intent.putExtra("id", step.getStepId());
         intent.putParcelableArrayListExtra("steps_extra", (ArrayList<? extends Parcelable>) steps);
         startActivity(intent);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 }

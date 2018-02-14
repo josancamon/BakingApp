@@ -16,11 +16,13 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             RecipesListFragment recipesFragment = new RecipesListFragment();
             fragmentManager.beginTransaction().add(R.id.recipe_list, recipesFragment).commit();
-            //new async().execute();
+        }
+        //new async().execute();
 
     }
 

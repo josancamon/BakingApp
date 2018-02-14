@@ -60,7 +60,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.from(container.getContext() ).inflate(R.layout.fragment_steps_list, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_steps_list, container, false);
         recyclerView = rootView.findViewById(R.id.steps_recycler_view);
         int orientation = getResources().getConfiguration().orientation;
 
