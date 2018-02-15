@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
-    private static final String TAG = "DetailsRecipeActivity";
-    private List<Step> mSteps = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +39,6 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
         intent.putParcelableArrayListExtra("steps_extra", (ArrayList<? extends Parcelable>) steps);
         startActivity(intent);
     }
-
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);

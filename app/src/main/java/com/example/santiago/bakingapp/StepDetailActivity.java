@@ -22,9 +22,7 @@ import java.util.List;
 
 public class StepDetailActivity extends AppCompatActivity implements StepDetailFragment.ChangeStepClickListener {
     private static final String TAG = StepDetailActivity.class.getSimpleName();
-    private String shortDescription;
-    private String description;
-    private String videoUrl;
+
     private int mStepId;
     private List<Step> stepsList;
 
@@ -32,19 +30,15 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        if (savedInstanceState == null) {
-            Intent intent = getIntent();
-            shortDescription = intent.getStringExtra("shortDescription");
-            description = intent.getStringExtra("description");
-            videoUrl = intent.getStringExtra("videoUrl");
-            mStepId = intent.getIntExtra("id", 0);
-            stepsList = intent.getParcelableArrayListExtra("steps_extra");
-            StepDetailFragment stepDetailFragment = new StepDetailFragment();
-            stepDetailFragment.setStepList(stepsList);
-            stepDetailFragment.setStepData(mStepId);
-            getSupportFragmentManager().beginTransaction().add(R.id.rec, stepDetailFragment).commit();
-            //Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
-        }
+        Intent intent = getIntent();
+        mStepId = intent.getIntExtra("id", 0);
+        stepsList = intent.getParcelableArrayListExtra("steps_extra");
+        StepDetailFragment stepDetailFragment = new StepDetailFragment();
+        stepDetailFragment.setStepList(stepsList);
+        stepDetailFragment.setStepData(mStepId);
+        getSupportFragmentManager().beginTransaction().add(R.id.rec, stepDetailFragment).commit();
+        //Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
+
     }
 
     @Override
@@ -57,11 +51,4 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString("shortDescription", shortDescription);
-        outState.putString("videoUrl", videoUrl);
-        outState.putInt("stepId", mStepId);
-        super.onSaveInstanceState(outState, outPersistentState);
-    }
 }
