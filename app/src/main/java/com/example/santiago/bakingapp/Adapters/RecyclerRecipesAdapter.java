@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.santiago.bakingapp.IngredientsWidget;
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
 
@@ -33,11 +34,13 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         public final TextView recipeName;
         public final TextView recipeServings;
         public final ImageView recipeImage;
+        public final ImageView addRecipeWidget;
         public RecipeViewHolder(View itemView) {
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipe_name);
             recipeServings = itemView.findViewById(R.id.recipe_servings);
             recipeImage = itemView.findViewById(R.id.recipe_image);
+            addRecipeWidget = itemView.findViewById(R.id.add_recipe_widget);
             itemView.setOnClickListener(this);
         }
 
@@ -59,6 +62,12 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         holder.recipeName.setText(actualRecipe.getRecipeName());
         holder.recipeServings.setText(String.valueOf(actualRecipe.getServings()));
         holder.recipeImage.setImageBitmap(actualRecipe.getImageBitmap());
+        holder.addRecipeWidget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new IngredientsWidget();
+            }
+        });
     }
 
     @Override

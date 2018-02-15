@@ -80,7 +80,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
     private void loadData() {
         LoaderManager loaderManager = getLoaderManager();
-       loaderManager.initLoader(LOADER_ID,null,this);
+        loaderManager.initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     public void setRecipeId(int id) {
         recipeId = id;
     }
+
 
     @Override
     public Loader<List<Step>> onCreateLoader(int id, Bundle args) {
@@ -105,7 +106,6 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
                 List<Step> steps = new ArrayList<>();
                 try {
                     steps = NetworkUtils.getRecipeSteps(recipeId);
-                    stepsList = steps;
                 } catch (Exception e) {
                     Log.d(TAG, "loadInBackground: " + e);
                 }
@@ -117,6 +117,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     @Override
     public void onLoadFinished(Loader<List<Step>> loader, List<Step> data) {
         recyclerStepsAdapter.setData(data);
+        stepsList = data;
     }
 
 

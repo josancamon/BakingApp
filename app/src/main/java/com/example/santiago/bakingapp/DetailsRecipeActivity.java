@@ -23,7 +23,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
         if (savedInstanceState == null) {
-            Intent intent = getIntent();//
+            Intent intent = getIntent();
             String id = intent.getStringExtra("id");
             IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
             fragment.setRecipeId(id);
@@ -33,7 +33,6 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
 
     @Override
     public void onStepClickListener(Step step, List<Step> steps) {
-        mSteps = steps;
         Intent intent = new Intent(this, StepDetailActivity.class);
         intent.putExtra("shortDescription", step.getShortDescription());
         intent.putExtra("description", step.getDescription());
