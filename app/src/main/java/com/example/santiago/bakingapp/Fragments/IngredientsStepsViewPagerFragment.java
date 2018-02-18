@@ -10,7 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.santiago.bakingapp.R;
 
@@ -27,6 +29,8 @@ public class IngredientsStepsViewPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients_and_steps_view_pager, container, false);
+        int size = getResources().getConfiguration().smallestScreenWidthDp;
+        int orientation = getResources().getConfiguration().orientation;
         progressBar = rootView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         viewPager = rootView.findViewById(R.id.ingredients_steps_view_pager);
@@ -37,6 +41,7 @@ public class IngredientsStepsViewPagerFragment extends Fragment {
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         viewPager.setAdapter(adapterViewPager);
+
         return rootView;
     }
     // ...

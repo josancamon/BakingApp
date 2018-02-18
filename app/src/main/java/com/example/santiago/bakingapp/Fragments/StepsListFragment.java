@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Adapters.RecyclerStepsAdapter;
 import com.example.santiago.bakingapp.Model.Step;
@@ -63,18 +64,25 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
         final View rootView = inflater.inflate(R.layout.fragment_steps_list, container, false);
         recyclerView = rootView.findViewById(R.id.steps_recycler_view);
         int orientation = getResources().getConfiguration().orientation;
-
+        int minSize = getResources().getConfiguration().smallestScreenWidthDp;
         if (orientation == 2) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(container.getContext(), 2);
-            recyclerView.setLayoutManager(gridLayoutManager);
+            if (minSize >= 600) {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
+                recyclerView.setLayoutManager(gridLayoutManager);
+            } else {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+                recyclerView.setLayoutManager(gridLayoutManager);
+            }
         } else {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
         }
+
         recyclerView.setHasFixedSize(true);
-        recyclerStepsAdapter = new RecyclerStepsAdapter(container.getContext(), this);
+        recyclerStepsAdapter = new RecyclerStepsAdapter(getContext(), this);
         recyclerView.setAdapter(recyclerStepsAdapter);
         loadData();
+
         return rootView;
     }
 

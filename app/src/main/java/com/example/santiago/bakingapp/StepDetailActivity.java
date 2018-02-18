@@ -18,6 +18,7 @@ import android.widget.Toolbar;
 import com.example.santiago.bakingapp.Fragments.StepDetailFragment;
 import com.example.santiago.bakingapp.Model.Step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepDetailActivity extends AppCompatActivity implements StepDetailFragment.ChangeStepClickListener {
@@ -33,10 +34,12 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         Intent intent = getIntent();
         mStepId = intent.getIntExtra("id", 0);
         stepsList = intent.getParcelableArrayListExtra("steps_extra");
-        StepDetailFragment stepDetailFragment = new StepDetailFragment();
-        stepDetailFragment.setStepList(stepsList);
-        stepDetailFragment.setStepData(mStepId);
-        getSupportFragmentManager().beginTransaction().add(R.id.rec, stepDetailFragment).commit();
+        if (savedInstanceState == null) {
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+            stepDetailFragment.setStepList(stepsList);
+            stepDetailFragment.setStepData(mStepId);
+            getSupportFragmentManager().beginTransaction().add(R.id.rec, stepDetailFragment).commit();
+        }
         //Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
 
     }
@@ -51,4 +54,9 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+       // outState.putParcelableArrayList("stepsList", (ArrayList<? extends Parcelable>) stepsList);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 }

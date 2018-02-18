@@ -6,6 +6,7 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Fragments.IngredientsStepsViewPagerFragment;
 import com.example.santiago.bakingapp.Fragments.StepsListFragment;
@@ -16,16 +17,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
+    private static final String TAG = DetailsRecipeActivity.class.getSimpleName();
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
+        int orientation = getResources().getConfiguration().orientation;
+        int minSize = getResources().getConfiguration().smallestScreenWidthDp;
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("id");
+
         if (savedInstanceState == null) {
-            Intent intent = getIntent();
-            String id = intent.getStringExtra("id");
-            IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
-            fragment.setRecipeId(id);
-            getSupportFragmentManager().beginTransaction().add(R.id.recipess, fragment).commit();
+            if (orientation == 2) {
+                if (minSize >= 600) {
+                    mTwoPane =true;
+                    StepsListFragment stepsListFragment = new StepsListFragment();
+                    stepsListFragment.setRecipeId(Integer.valueOf(id));
+                    getSupportFragmentManager().beginTransaction().add(R.id.stepsss, stepsListFragment).commit();
+                }
+            } else {
+                mTwoPane=false;
+                IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
+                fragment.setRecipeId(id);
+                getSupportFragmentManager().beginTransaction().add(R.id.recipess, fragment).commit();
+            }
+        } else{
+            boolean mTwo = savedInstanceState.getBoolean("mTwoPane");
+            if (!mTwo){
+                StepsListFragment stepsListFragment = new StepsListFragment();
+                stepsListFragment.setRecipeId(Integer.valueOf(id));
+                getSupportFragmentManager().beginTransaction().add(R.id.stepsss, stepsListFragment).commit();
+            }else {
+                IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
+                fragment.setRecipeId(id);
+                getSupportFragmentManager().beginTransaction().add(R.id.recipess, fragment).commit();
+            }
         }
     }
 
@@ -39,8 +67,10 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
         intent.putParcelableArrayListExtra("steps_extra", (ArrayList<? extends Parcelable>) steps);
         startActivity(intent);
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putBoolean("mTwoPane",mTwoPane);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 }

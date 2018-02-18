@@ -1,5 +1,6 @@
 package com.example.santiago.bakingapp.Fragments;
 
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.example.santiago.bakingapp.Model.Step;
 import com.example.santiago.bakingapp.R;
 import com.example.santiago.bakingapp.Utilities.NetworkUtils;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -81,7 +83,17 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_step_detail, container, false);
+        stepDescription = rootView.findViewById(R.id.step_description);
+        previousImageView = rootView.findViewById(R.id.previous_video);
         nextImageView = rootView.findViewById(R.id.next_video);
+        simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation==2){
+            stepDescription.setVisibility(View.GONE);
+        }else if (orientation ==1){
+            stepDescription.setVisibility(View.VISIBLE);
+        }
         nextImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +104,6 @@ public class StepDetailFragment extends Fragment {
                 }
             }
         });
-        previousImageView = rootView.findViewById(R.id.previous_video);
         previousImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,15 +114,27 @@ public class StepDetailFragment extends Fragment {
                 }
             }
         });
-        simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
-        if (!videoUrl.equals("")) {
-            Uri uri = Uri.parse(videoUrl).buildUpon().build();
-            initializePlayer(uri);
+        if (savedInstanceState == null) {
+            if (videoUrl != null) {
+                if (!videoUrl.equals("")) {
+                    Uri uri = Uri.parse(videoUrl).buildUpon().build();
+                    initializePlayer(uri);
+                }
+            }
+            stepDescription.setText(stepDescriptionString);
         } else {
+            stepsList = savedInstanceState.getParcelableArrayList("stepsReceived");
+            videoUrl = savedInstanceState.getString("videoUrl");
+            if (videoUrl != null) {
+                if (!videoUrl.equals("")) {
+                    Uri uri = Uri.parse(videoUrl).buildUpon().build();
+                    initializePlayer(uri);
+                }
+            }
+            stepDescription.setText(savedInstanceState.getString("stepDescription"));
         }
         //needed to get the video url and the description by an intent
-        stepDescription = rootView.findViewById(R.id.step_description);
-        stepDescription.setText(stepDescriptionString);
+
         return rootView;
     }
     //3105645037
@@ -154,4 +177,14 @@ public class StepDetailFragment extends Fragment {
         }
         stepDescriptionString = actualStep.getDescription();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("videoUrl", videoUrl);
+        outState.putString("stepDescription", stepDescriptionString);
+        outState.putParcelableArrayList("stepsReceived", (ArrayList<? extends Parcelable>) stepsList);
+        super.onSaveInstanceState(outState);
+    }
+
+
 }
