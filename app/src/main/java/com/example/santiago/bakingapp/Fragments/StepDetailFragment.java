@@ -139,7 +139,7 @@ public class StepDetailFragment extends Fragment {
     }
     //3105645037
 
-    private void initializePlayer(Uri uri) {
+    public void initializePlayer(Uri uri) {
         if (simpleExoPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
