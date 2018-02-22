@@ -1,6 +1,11 @@
 package com.example.santiago.bakingapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +17,7 @@ import com.example.santiago.bakingapp.Widget.IngredientsWidgetProvider;
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +35,6 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         mConext = context;
         mRecipesOnClickListener = recipesOnClickListener;
     }
-
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView recipeName;
         public final TextView recipeServings;
@@ -42,12 +47,14 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
             recipeImage = itemView.findViewById(R.id.recipe_image);
             addRecipeWidget = itemView.findViewById(R.id.add_recipe_widget);
             itemView.setOnClickListener(this);
+            addRecipeWidget.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
            mRecipesOnClickListener.onClick(mRecipesList.get(getAdapterPosition()));
         }
+
     }
 
     @Override
@@ -57,17 +64,12 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
     }
 
     @Override
-    public void onBindViewHolder(RecipeViewHolder holder, int position) {
+    public void onBindViewHolder(final RecipeViewHolder holder, int position) {
         Recipe actualRecipe = mRecipesList.get(position);
         holder.recipeName.setText(actualRecipe.getRecipeName());
         holder.recipeServings.setText(String.valueOf(actualRecipe.getServings()));
         holder.recipeImage.setImageBitmap(actualRecipe.getImageBitmap());
-        holder.addRecipeWidget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new IngredientsWidgetProvider();
-            }
-        });
+
     }
 
     @Override
@@ -79,4 +81,5 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         mRecipesList = recipesList;
         notifyDataSetChanged();
     }
+
 }

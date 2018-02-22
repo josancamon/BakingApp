@@ -39,9 +39,13 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     private static final int LOADER_ID = 1;
     private ProgressBar progressBar;
     private List<Recipe> recipes;
+    AddShorcut addShorcut;
 
     public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipeClicked);
+    }
+    public interface AddShorcut{
+        void addShortcut(Recipe recipeAdded);
     }
 
     public RecipesListFragment() {
@@ -52,6 +56,7 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         super.onAttach(context);
         try {
             onRecipeClickListener = (OnRecipeClickListener) context;
+            addShorcut = (AddShorcut) context;
         } catch (Exception e) {
             Log.d(TAG, "onAttach error  : " + e);
         }
@@ -89,6 +94,7 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     @Override
     public void onClick(Recipe recipeClicked) {
         onRecipeClickListener.onRecipeClick(recipeClicked);
+        addShorcut.addShortcut(recipeClicked);
     }
 
     @Override
