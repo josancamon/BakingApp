@@ -22,20 +22,21 @@ import java.util.List;
 
 public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
     private static final String TAG = DetailsRecipeActivity.class.getSimpleName();
-
+    private int minSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
-
-        int minSize = getResources().getConfiguration().smallestScreenWidthDp;
+        minSize = getResources().getConfiguration().smallestScreenWidthDp;
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
-
         if (savedInstanceState == null) {
-
-            if (minSize >= 600) {
+            if (minSize < 600) {
+                IngredientsStepsViewPagerFragment ingredientsStepsViewPagerFragment = new IngredientsStepsViewPagerFragment();
+                ingredientsStepsViewPagerFragment.setRecipeId(id);
+                getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsViewPagerFragment).commit();
+            } else {
                 IngredientsListFragment ingredientsListFragment = new IngredientsListFragment();
                 ingredientsListFragment.setRecipeId(id);
                 getSupportFragmentManager().beginTransaction().add(R.id.ingredients_7, ingredientsListFragment).commit();
@@ -43,18 +44,15 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
                 StepsListFragment stepsListFragment = new StepsListFragment();
                 stepsListFragment.setRecipeId(Integer.valueOf(id));
                 getSupportFragmentManager().beginTransaction().add(R.id.stepsss, stepsListFragment).commit();
-            } else {
-                IngredientsStepsViewPagerFragment fragment = new IngredientsStepsViewPagerFragment();
-                fragment.setRecipeId(id);
-                getSupportFragmentManager().beginTransaction().add(R.id.recipess, fragment).commit();
             }
         }
+
     }
 
     @Override
     public void onStepClickListener(Step step, List<Step> steps) {
-        int minsize = getResources().getConfiguration().smallestScreenWidthDp;
-        if (minsize < 600) {
+
+        if (minSize < 600) {
             Intent intent = new Intent(this, StepDetailActivity.class);
             intent.putExtra("shortDescription", step.getShortDescription());
             intent.putExtra("description", step.getDescription());
@@ -62,8 +60,8 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
             intent.putExtra("id", step.getStepId());
             intent.putParcelableArrayListExtra("steps_extra", (ArrayList<? extends Parcelable>) steps);
             startActivity(intent);
-        }else{
-            StepDetailFragment stepDetailFragment =new StepDetailFragment();
+        } else {
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
             stepDetailFragment.setStepList(steps);
             stepDetailFragment.setStepData(step.getStepId());
             getSupportFragmentManager().beginTransaction().add(R.id.detail_step_7, stepDetailFragment).commit();

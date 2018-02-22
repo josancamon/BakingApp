@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.santiago.bakingapp.IngredientsWidget;
+import com.example.santiago.bakingapp.Widget.IngredientsWidgetProvider;
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
 
@@ -65,7 +65,7 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         holder.addRecipeWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new IngredientsWidget();
+                new IngredientsWidgetProvider();
             }
         });
     }

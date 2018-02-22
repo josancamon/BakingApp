@@ -1,4 +1,4 @@
-package com.example.santiago.bakingapp;
+package com.example.santiago.bakingapp.Widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -7,11 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.example.santiago.bakingapp.MainActivity;
+import com.example.santiago.bakingapp.R;
+
 /**
  * Created by Santiago on 12/02/2018.
  */
 
-public class IngredientsWidget extends AppWidgetProvider {
+public class IngredientsWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
@@ -19,9 +22,9 @@ public class IngredientsWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fragment_ingredients_list);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_app_widget);
         // Widgets allow click handlers to only launch pending intents
-        views.setOnClickPendingIntent(R.id.ingrediets_recycler, pendingIntent);
+        views.setOnClickPendingIntent(R.id.ingredients_widget_container, pendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -34,17 +37,10 @@ public class IngredientsWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-    }
-
-    @Override
     public void onEnabled(Context context) {
-        super.onEnabled(context);
     }
 
     @Override
     public void onDisabled(Context context) {
-        super.onDisabled(context);
     }
 }

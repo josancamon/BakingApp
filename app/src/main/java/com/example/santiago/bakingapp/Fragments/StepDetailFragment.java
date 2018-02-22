@@ -89,7 +89,8 @@ public class StepDetailFragment extends Fragment {
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
 
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation==2){
+        int minSize = getResources().getConfiguration().smallestScreenWidthDp;
+        if (orientation==2 && minSize<600){
             stepDescription.setVisibility(View.GONE);
         }else if (orientation ==1){
             stepDescription.setVisibility(View.VISIBLE);
