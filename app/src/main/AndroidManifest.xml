@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data
-                android:name=""
+                android:name="android.app.recipe.widget"
                 android:resource="@xml/recipe_widget_info" />
         </activity>
         <activity android:name=".DetailsRecipeActivity" />
