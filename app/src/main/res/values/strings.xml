@@ -11,4 +11,5 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="label_1">label 1</string>
+    <string name="pref_file_key">pref_file_key</string>
 </resources>

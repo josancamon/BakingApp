@@ -5,12 +5,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
 
     @Override
     public void addShortcut(Recipe recipeAdded) {
+        SharedPreferences sharedPref = getSharedPreferences("prefs",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("id",recipeAdded.getId());
+        editor.apply();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             pinWidgetToHomeScreen(this);
         }
