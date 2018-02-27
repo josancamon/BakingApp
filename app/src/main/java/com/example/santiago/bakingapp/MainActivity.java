@@ -1,11 +1,15 @@
 package com.example.santiago.bakingapp;
 
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -16,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Fragments.RecipesListFragment;
 import com.example.santiago.bakingapp.Model.Recipe;
+import com.example.santiago.bakingapp.Widget.IngredientsWidgetProvider;
 
 import java.util.Arrays;
 
@@ -31,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
             fragmentManager.beginTransaction().add(R.id.recipe_list, recipesFragment).commit();
         }
         //new async().execute();
-
     }
 
     @Override
@@ -49,36 +53,20 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
 
     @Override
     public void addShortcut(Recipe recipeAdded) {
-        setset();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            pinWidgetToHomeScreen(this);
+        }
     }
 
-    public void setset() {
-        ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
-        if (mShortcutManager.isRequestPinShortcutSupported()) {
-            // Assumes there's already a shortcut with the ID "my-shortcut".
-            // The shortcut must be enabled.
-            ShortcutInfo pinShortcutInfo =
-                    new ShortcutInfo.Builder(this, "my-shortcut").setShortLabel("asdas").
-                            setLongLabel("Open the web site")
-                            .setIcon(Icon.createWithResource(this, R.drawable.add_logo))
-                            .setIntent(new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("https://www.mysite.example.com/"))).build();
-
-            // Create the PendingIntent object only if your app needs to be notified
-            // that the user allowed the shortcut to be pinned. Note that, if the
-            // pinning operation fails, your app isn't notified. We assume here that the
-            // app has implemented a method called createShortcutResultIntent() that
-            // returns a broadcast intent.
-            Intent pinnedShortcutCallbackIntent =
-                    mShortcutManager.createShortcutResultIntent(pinShortcutInfo);
-
-            // Configure the intent so that your app's broadcast receiver gets
-            // the callback successfully.
-            PendingIntent successCallback = PendingIntent.getBroadcast(this, 0,
-                    pinnedShortcutCallbackIntent, 0);
-
-            mShortcutManager.requestPinShortcut(pinShortcutInfo,
-                    successCallback.getIntentSender());
+    private void pinWidgetToHomeScreen(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AppWidgetManager appWidgetManager = context.getSystemService(AppWidgetManager.class);
+            if (appWidgetManager.isRequestPinAppWidgetSupported()) {
+                ComponentName widgetProvider = new ComponentName(context, IngredientsWidgetProvider.class);
+                appWidgetManager.requestPinAppWidget(widgetProvider, null, null);
+            } else {
+                Toast.makeText(context, "device not support pinning", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

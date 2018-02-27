@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- <receiver android:name=".Widget.IngredientsWidgetProvider">
+
+        <receiver android:name=".Widget.IngredientsWidgetProvider">
              <intent-filter>
                  <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
              </intent-filter>
@@ -19,7 +20,8 @@
              <meta-data
                  android:name="android.appwidget.provider"
                  android:resource="@xml/recipe_widget_info" />
-         </receiver>-->
+         </receiver>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
