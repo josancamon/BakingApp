@@ -29,7 +29,7 @@ import static android.content.ContentValues.TAG;
  * Created by Santiago on 27/01/2018.
  */
 
-public final class NetworkUtils {
+public final class  NetworkUtils {
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
     private static JSONArray mRecipesSteps;
     private static JSONArray completeJson;
@@ -116,7 +116,11 @@ public final class NetworkUtils {
             if (step.getString("videoURL") != null) {
                 videoUrl = step.getString("videoURL");
             }
-            Step actualStep = new Step(i + 1, shortDescription, description, videoUrl);
+            String thumbnailUrl = "";
+            if (step.getString("thumbnailURL")!=null){
+                thumbnailUrl = step.getString("thumbnailURL");
+            }
+            Step actualStep = new Step(i + 1, shortDescription, description, videoUrl,thumbnailUrl);
             Log.d(TAG, "getRecipeSteps: " + shortDescription);
             steps.add(actualStep);
         }

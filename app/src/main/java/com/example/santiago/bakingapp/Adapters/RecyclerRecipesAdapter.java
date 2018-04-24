@@ -35,7 +35,7 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         mConext = context;
         mRecipesOnClickListener = recipesOnClickListener;
     }
-    class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView recipeName;
         public final TextView recipeServings;
         public final ImageView recipeImage;
@@ -47,7 +47,7 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
             recipeImage = itemView.findViewById(R.id.recipe_image);
             addRecipeWidget = itemView.findViewById(R.id.add_recipe_widget);
             itemView.setOnClickListener(this);
-            addRecipeWidget.setOnClickListener(this);
+            //addRecipeWidget.setOnClickListener(this);
         }
 
         @Override

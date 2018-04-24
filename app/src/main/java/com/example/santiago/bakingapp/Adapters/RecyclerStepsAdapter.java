@@ -1,14 +1,18 @@
 package com.example.santiago.bakingapp.Adapters;
 
 import android.content.Context;
+import android.media.Image;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.santiago.bakingapp.Model.Step;
 import com.example.santiago.bakingapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
 
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView sTepTextView;
+        //final ImageView thumbnail;
         private final TextView stepIndex;
        // private final ImageView stepImageView;
         public StepsViewHolder(View itemView) {
@@ -38,6 +43,7 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
             sTepTextView = itemView.findViewById(R.id.step_text_view);
             //stepImageView = itemView.findViewById(R.id.step_image);
             stepIndex = itemView.findViewById(R.id.step_index);
+            //thumbnail = itemView.findViewById(R.id.thumbnail);
             itemView.setOnClickListener(this);
         }
 
@@ -46,6 +52,7 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
             mStepOnclickListener.onClick(stepsList.get(getAdapterPosition()));
         }
     }
+
     @Override
     public StepsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_steps,parent,false);
@@ -56,6 +63,8 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
     public void onBindViewHolder(StepsViewHolder holder, int position) {
         Step step = stepsList.get(position);
         holder.sTepTextView.setText(step.getShortDescription());
+        String thumbnailUrl = step.getThumbnailUrl();
+       // Picasso.get().load(Uri.parse(step.getThumbnailUrl())).into(holder.thumbnail);
         holder.stepIndex.setText(String.valueOf(position+1));
        /* if (step.getImageBitmap()!= null){
            // holder.stepImageView.setImageBitmap(step.getImageBitmap());

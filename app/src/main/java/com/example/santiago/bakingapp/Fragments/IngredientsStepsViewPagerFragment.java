@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.santiago.bakingapp.R;
 
@@ -29,9 +31,9 @@ public class IngredientsStepsViewPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients_and_steps_view_pager, container, false);
-        int size = getResources().getConfiguration().smallestScreenWidthDp;
-        int orientation = getResources().getConfiguration().orientation;
         progressBar = rootView.findViewById(R.id.progress_bar);
+        android.support.v7.widget.Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         progressBar.setVisibility(View.GONE);
         viewPager = rootView.findViewById(R.id.ingredients_steps_view_pager);
         MyPagerAdapter adapterViewPager = new MyPagerAdapter(getFragmentManager());
@@ -70,7 +72,9 @@ public class IngredientsStepsViewPagerFragment extends Fragment {
                     return ingredientsListFragment;
                 case 1: // Fragment # 0 - This will show FirstFragment
                     StepsListFragment stepsListFragment = new StepsListFragment();
-                    stepsListFragment.setRecipeId(Integer.valueOf(mRecipeId));
+                    if (mRecipeId!=null){
+                        stepsListFragment.setRecipeId(Integer.valueOf(mRecipeId));
+                    }
                     return stepsListFragment;
                 default:
                     return null;

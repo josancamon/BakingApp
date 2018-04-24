@@ -25,7 +25,7 @@ public class RecyclerIngredientsAdapter  extends RecyclerView.Adapter<RecyclerIn
         mContext = context;
     }
 
-    class IngredientsViewHolder extends RecyclerView.ViewHolder{
+    public class IngredientsViewHolder extends RecyclerView.ViewHolder{
         public TextView quantity;
         public TextView measure;
         public TextView ingredientName;

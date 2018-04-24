@@ -61,6 +61,8 @@ public class StepDetailFragment extends Fragment {
     private int mStepIndex;
     private static final String TAG = StepDetailFragment.class.getSimpleName();
     private List<Step> stepsList;
+    private long position = 0;
+    private Uri uri;
 
     public StepDetailFragment() {
     }
@@ -90,9 +92,9 @@ public class StepDetailFragment extends Fragment {
 
         int orientation = getResources().getConfiguration().orientation;
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
-        if (orientation==2 && minSize<600){
+        if (orientation == 2 && minSize < 600) {
             stepDescription.setVisibility(View.GONE);
-        }else if (orientation ==1){
+        } else if (orientation == 1) {
             stepDescription.setVisibility(View.VISIBLE);
         }
         nextImageView.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +117,7 @@ public class StepDetailFragment extends Fragment {
                 }
             }
         });
+        position = C.TIME_UNSET;
         if (savedInstanceState == null) {
             if (videoUrl != null) {
                 if (!videoUrl.equals("")) {
@@ -124,11 +127,12 @@ public class StepDetailFragment extends Fragment {
             }
             stepDescription.setText(stepDescriptionString);
         } else {
+            position = savedInstanceState.getLong("video_state");
             stepsList = savedInstanceState.getParcelableArrayList("stepsReceived");
             videoUrl = savedInstanceState.getString("videoUrl");
             if (videoUrl != null) {
                 if (!videoUrl.equals("")) {
-                    Uri uri = Uri.parse(videoUrl).buildUpon().build();
+                    uri = Uri.parse(videoUrl).buildUpon().build();
                     initializePlayer(uri);
                 }
             }
@@ -151,6 +155,9 @@ public class StepDetailFragment extends Fragment {
             String userAgent = Util.getUserAgent(getActivity(), "ClassicalMusicQuiz");
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            if (position != C.TIME_UNSET) {
+                simpleExoPlayer.seekTo(position);
+            }
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
         }
@@ -162,6 +169,13 @@ public class StepDetailFragment extends Fragment {
         if (!videoUrl.equals("")) {
             simpleExoPlayer.stop();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer(uri);
+
     }
 
     public void setStepList(List<Step> stepss) {
@@ -184,6 +198,8 @@ public class StepDetailFragment extends Fragment {
         outState.putString("videoUrl", videoUrl);
         outState.putString("stepDescription", stepDescriptionString);
         outState.putParcelableArrayList("stepsReceived", (ArrayList<? extends Parcelable>) stepsList);
+        long position = simpleExoPlayer.getCurrentPosition();
+        outState.putLong("video_state", position);
         super.onSaveInstanceState(outState);
     }
 

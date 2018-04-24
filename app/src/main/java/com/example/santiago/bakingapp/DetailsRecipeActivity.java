@@ -3,9 +3,11 @@ package com.example.santiago.bakingapp;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Fragments.IngredientsListFragment;
@@ -49,6 +51,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
 
     }
 
+
     @Override
     public void onStepClickListener(Step step, List<Step> steps) {
 
@@ -71,5 +74,15 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

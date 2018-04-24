@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -15,7 +12,6 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.example.santiago.bakingapp.Fragments.IngredientsListFragment;
 import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.R;
 import com.example.santiago.bakingapp.Utilities.NetworkUtils;
@@ -29,15 +25,16 @@ import static android.content.ContentValues.TAG;
  * Created by Santiago on 21/02/2018.
  */
 
-public class IngredientsWidgetService extends RemoteViewsService implements LoaderManager.LoaderCallbacks<List<Ingredient>>{
+public class IngredientsWidgetService extends RemoteViewsService implements
+        LoaderManager.LoaderCallbacks<List<Ingredient>>{
 
     String id;
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-       // List<Ingredient> ingredientsReceived =  intent.getParcelableArrayListExtra("list_ingredients");
+        List<Ingredient> ingredientsReceived =  intent.getParcelableArrayListExtra("list_ingredients");
         Log.d(TAG, "onGetViewFactory: "+"here is correccct");
 
-        SharedPreferences sharedPreferences = getSharedPreferences("prefs",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences_string),Context.MODE_PRIVATE);
         id = sharedPreferences.getString("id","0");
         Log.d(TAG, "getViewAt: " +id);
         return new ListRemoteViewsFactory(this.getApplicationContext(),null);

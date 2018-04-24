@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="8dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Display05"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
             android:textSize="28sp"
             tools:text="Recipe Introduction" />
 
