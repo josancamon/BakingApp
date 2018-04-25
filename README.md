@@ -20,9 +20,9 @@ In this project i did:
 
 ## Screens
 
-![screen](../master/images/baking-app-main.png)  ![screen](../master/images/baking-app-detail.png)
+![screen](../master/images/baking-app-main.png)            ![screen](../master/images/baking-app-detail.png)
 
-![screen](../master/images/baking-app-step.png)
+![screen](../master/images/baking-app-detail-ingredients.png)            ![screen](../master/images/baking-app-step.png)
 
 # Rubric
 
