@@ -20,7 +20,11 @@ In this project i did:
 
 ## Screens
 
-## Rubric
+![screen](../master/images/baking-app-main.png)  ![screen](../master/images/baking-app-detail.png)
+
+![screen](../master/images/baking-app-step.png)
+
+# Rubric
 
 ### General App Usage
 - [x] App should display recipes from provided network resource.
