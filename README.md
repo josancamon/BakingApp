@@ -10,8 +10,8 @@ You will productionize an app, taking it from a functional state to a production
 ## Why this Project?
 As a working Android developer, you often have to create and implement apps where you are responsible for designing and planning the steps you need to take to create a production-ready app.
 
-## What I learned?
-In this project i did:
+## What I will learn?
+In this project i will:
 * Use MediaPlayer/Exoplayer to display videos.
 * Handle error cases in Android.
 * Add a widget to your app experience.
