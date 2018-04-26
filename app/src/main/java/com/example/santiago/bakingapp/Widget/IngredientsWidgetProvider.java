@@ -5,14 +5,18 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Parcelable;
 import android.widget.RemoteViews;
 
 import com.example.santiago.bakingapp.MainActivity;
 import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.R;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,39 +24,43 @@ import java.util.List;
  */
 
 public class IngredientsWidgetProvider extends AppWidgetProvider {
+    SharedPreferences sharedPreferences;
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId, String recipeName, List<Ingredient> ingredientList) {
 
-        // Create an Intent to launch MainActivity when clicked
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        // Construct the RemoteViews object
-        RemoteViews views = getRem(context);
-        // Widgets allow click handlers to only launch pending intents
-        views.setOnClickPendingIntent(R.id.ingredients_widget_container, pendingIntent);
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-//pasar list ingredients y contents como extras en el intent
-    private static RemoteViews getRem(Context context) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_app_widget);
-        // Set the GridWidgetService intent to act as the adapter for the GridView
-        Intent intent = new Intent(context, IngredientsWidgetService.class);
-        views.setRemoteAdapter(R.id.ingredients_widget_container, intent);
-        // Set the PlantDetailActivity intent to launch when clicked
-        Intent appIntent = new Intent(context, MainActivity.class);
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.ingredients_widget_container, appPendingIntent);
-        // Handle empty gardens
-        //views.setEmptyView(R.id.ingredients_widget_container, R.id.empty_view);
-        return views;
+        views.setTextViewText(R.id.title_w, recipeName);
+        views.removeAllViews(R.id.container_w);
+        if (ingredientList!=null){
+            for (Ingredient ingredient : ingredientList) {
+                RemoteViews ingredientView = new RemoteViews(context.getPackageName(),
+                        R.layout.list_item_ingredient);
+                ingredientView.setTextViewText(R.id.ingredient_name,ingredient.getIngredient());
+                ingredientView.setTextViewText(R.id.ingredient_quantity,ingredient.getQuantity());
+                ingredientView.setTextViewText(R.id.ingredient_measure,ingredient.getMeasure());
+                views.addView(R.id.container_w, ingredientView);
+            }
+        }
+
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        List<Ingredient> ingredients ;
+        sharedPreferences = context.getSharedPreferences("preferences",
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String result = sharedPreferences.getString("ingredients",null);
+        Ingredient[] arrayIngredient = gson.fromJson(result,Ingredient[].class);
+        ingredients = Arrays.asList(arrayIngredient);
+        ingredients = new ArrayList<>(ingredients);
+        String recipeName = sharedPreferences.getString("recipe_name",null);
+
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredients);
         }
     }
 

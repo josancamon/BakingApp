@@ -7,6 +7,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -33,14 +35,17 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
         minSize = getResources().getConfiguration().smallestScreenWidthDp;
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
+        String name = intent.getStringExtra("recipe_name");
         if (savedInstanceState == null) {
             if (minSize < 600) {
                 IngredientsStepsViewPagerFragment ingredientsStepsViewPagerFragment = new IngredientsStepsViewPagerFragment();
                 ingredientsStepsViewPagerFragment.setRecipeId(id);
+                ingredientsStepsViewPagerFragment.setRecipeName(name);
                 getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsViewPagerFragment).commit();
             } else {
                 IngredientsListFragment ingredientsListFragment = new IngredientsListFragment();
                 ingredientsListFragment.setRecipeId(id);
+                ingredientsListFragment.setRecipeName(name);
                 getSupportFragmentManager().beginTransaction().add(R.id.ingredients_7, ingredientsListFragment).commit();
 
                 StepsListFragment stepsListFragment = new StepsListFragment();
@@ -55,7 +60,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
     @Override
     public void onStepClickListener(Step step, List<Step> steps) {
 
-        if (minSize < 600) {
+        if (minSize < 600 ) {
             Intent intent = new Intent(this, StepDetailActivity.class);
             intent.putExtra("shortDescription", step.getShortDescription());
             intent.putExtra("description", step.getDescription());
@@ -67,7 +72,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
             StepDetailFragment stepDetailFragment = new StepDetailFragment();
             stepDetailFragment.setStepList(steps);
             stepDetailFragment.setStepData(step.getStepId());
-            getSupportFragmentManager().beginTransaction().add(R.id.detail_step_7, stepDetailFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.detail_step_7, stepDetailFragment).commit();
         }
     }
 
@@ -75,10 +80,10 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;

@@ -33,7 +33,7 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
         mStepOnclickListener = stepOnclickListener;
     }
 
-    class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView sTepTextView;
         //final ImageView thumbnail;
         private final TextView stepIndex;

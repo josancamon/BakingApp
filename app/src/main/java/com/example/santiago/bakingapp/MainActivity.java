@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
         Toast.makeText(this, recipeClicked.getRecipeName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, DetailsRecipeActivity.class);
         intent.putExtra("id", recipeClicked.getId());
+        intent.putExtra("recipe_name",recipeClicked.getRecipeName());
         startActivity(intent);
     }
 

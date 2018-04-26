@@ -35,7 +35,6 @@ public class RecipesTest {
         onView(withId(R.id.recycler_recipes)).perform(RecyclerViewActions.scrollToHolder(withRecyclerView("Brownies")));
         onView(withId(R.id.recycler_recipes)).perform(RecyclerViewActions.scrollToHolder(withRecyclerView("Yellow Cake")));
         onView(withId(R.id.recycler_recipes)).perform(RecyclerViewActions.scrollToHolder(withRecyclerView("Cheesecake")));
-        //onView(withId(R.id.ingrediets_recycler)).perform(RecyclerViewActions.scrollToPosition(0)).check(matches(withText("")));
     }
     public static Matcher< RecyclerView . ViewHolder >  withRecyclerView(final String text) {
         return new BoundedMatcher<RecyclerView.ViewHolder, RecyclerRecipesAdapter.RecipeViewHolder>(RecyclerRecipesAdapter.RecipeViewHolder.class) {

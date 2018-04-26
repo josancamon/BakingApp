@@ -1,5 +1,8 @@
 package com.example.santiago.bakingapp.Fragments;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,11 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Adapters.RecyclerIngredientsAdapter;
 import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.R;
 import com.example.santiago.bakingapp.Utilities.NetworkUtils;
+import com.example.santiago.bakingapp.Widget.IngredientsWidgetProvider;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +38,9 @@ public class IngredientsListFragment extends Fragment implements LoaderManager.L
     private RecyclerView recyclerView;
     private RecyclerIngredientsAdapter recyclerIngredientsAdapter;
     private String mRecipeId;
+    private Button addWidgetButton;
+    private List<Ingredient> ingredientsToWidget;
+    private String recipeName;
     public IngredientsListFragment() {
     }
 
@@ -38,6 +48,33 @@ public class IngredientsListFragment extends Fragment implements LoaderManager.L
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients_list, container, false);
+        addWidgetButton = rootView.findViewById(R.id.add_widget_btn);
+        int minSize = getResources().getConfiguration().smallestScreenWidthDp;
+        if (minSize<600){
+            addWidgetButton.setVisibility(View.GONE);
+        }
+        addWidgetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences("preferences", Context.MODE_PRIVATE);
+                Gson gson = new Gson();
+                String list = gson.toJson(ingredientsToWidget);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("ingredients",list);
+                editor.putString("recipe_name",recipeName);
+                editor.apply();
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getActivity());
+                Bundle bundle = new Bundle();
+                int appWidgetId = bundle.getInt(
+                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        AppWidgetManager.INVALID_APPWIDGET_ID);
+                IngredientsWidgetProvider.updateAppWidget(getActivity(), appWidgetManager, appWidgetId, recipeName,
+                        ingredientsToWidget);
+                Toast.makeText(getActivity(), "Widget Updated", Toast.LENGTH_SHORT).show();
+
+            }
+        });
         recyclerView = rootView.findViewById(R.id.ingrediets_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -73,6 +110,7 @@ public class IngredientsListFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<List<Ingredient>> loader, List<Ingredient> data) {
         recyclerIngredientsAdapter.setData(data);
+        ingredientsToWidget = data;
     }
 
     @Override
@@ -81,5 +119,8 @@ public class IngredientsListFragment extends Fragment implements LoaderManager.L
     }
     public void setRecipeId(String id){
         mRecipeId = id;
+    }
+    public void setRecipeName(String recipeName){
+        this.recipeName = recipeName;
     }
 }

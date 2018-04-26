@@ -123,6 +123,9 @@ public class StepDetailFragment extends Fragment {
                 if (!videoUrl.equals("")) {
                     Uri uri = Uri.parse(videoUrl).buildUpon().build();
                     initializePlayer(uri);
+                }else{
+                    simpleExoPlayerView.hideController();
+                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.no_video_available));
                 }
             }
             stepDescription.setText(stepDescriptionString);
