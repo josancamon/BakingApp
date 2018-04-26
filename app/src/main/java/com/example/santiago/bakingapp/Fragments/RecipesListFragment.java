@@ -1,9 +1,9 @@
 package com.example.santiago.bakingapp.Fragments;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.example.santiago.bakingapp.Adapters.RecyclerRecipesAdapter;
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
-import com.example.santiago.bakingapp.Adapters.RecyclerRecipesAdapter;
 import com.example.santiago.bakingapp.Utilities.NetworkUtils;
 
 import java.util.ArrayList;

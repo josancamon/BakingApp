@@ -1,20 +1,15 @@
 package com.example.santiago.bakingapp.Widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Parcelable;
 import android.widget.RemoteViews;
 
-import com.example.santiago.bakingapp.MainActivity;
 import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.R;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -1,10 +1,7 @@
 package com.example.santiago.bakingapp.Model;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.io.Serializable;
 
 /**
  * Created by Santiago on 29/01/2018.

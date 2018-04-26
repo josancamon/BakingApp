@@ -1,11 +1,6 @@
 package com.example.santiago.bakingapp.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.santiago.bakingapp.Widget.IngredientsWidgetProvider;
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

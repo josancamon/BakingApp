@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import static android.app.Instrumentation.ActivityResult;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.TextView;
 
-import com.example.santiago.bakingapp.Adapters.RecyclerIngredientsAdapter;
 import com.example.santiago.bakingapp.Adapters.RecyclerStepsAdapter;
 
 import org.hamcrest.Description;
@@ -24,22 +22,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.app.Instrumentation.ActivityResult;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class StepsTest {
+public class StepTest {
 
     @Rule public IntentsTestRule<MainActivity> mActivityRule =
             new IntentsTestRule<>(MainActivity.class);
@@ -74,6 +71,8 @@ public class StepsTest {
 
         onView(withId(R.id.steps_recycler_view)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0,click()));
+
+
 
 
 

@@ -1,25 +1,18 @@
 package com.example.santiago.bakingapp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Fragments.IngredientsListFragment;
 import com.example.santiago.bakingapp.Fragments.IngredientsStepsViewPagerFragment;
 import com.example.santiago.bakingapp.Fragments.StepDetailFragment;
 import com.example.santiago.bakingapp.Fragments.StepsListFragment;
-import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.Model.Step;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import java.util.ArrayList;
 import java.util.List;
