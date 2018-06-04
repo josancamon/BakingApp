@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:scaleType="centerCrop"
-            tools:src="@drawable/pie" />
+            tools:src="@drawable/pie"
+            android:contentDescription="@null"/>
 
         <TextView
             android:id="@+id/recipe_name"
@@ -34,9 +35,10 @@
             android:id="@+id/add_recipe_widget"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:padding="10dp"
-            android:src="@drawable/add_logo" />
+            android:src="@drawable/add_logo"
+            android:contentDescription="Pin widget with ingredients" />
 
         <TextView
             android:id="@+id/recipe_servings"

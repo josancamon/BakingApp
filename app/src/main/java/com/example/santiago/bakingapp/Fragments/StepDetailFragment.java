@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.santiago.bakingapp.Model.Step;
 import com.example.santiago.bakingapp.R;
@@ -52,6 +53,8 @@ public class StepDetailFragment extends Fragment {
     private List<Step> stepsList;
     private long position = 0;
     private Uri uri;
+    private ConstraintLayout layoutContainer;
+    private boolean isPlaying = true;
 
     public StepDetailFragment() {
     }
@@ -73,12 +76,13 @@ public class StepDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
-        View rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_step_detail, container, false);
+        View rootView = LayoutInflater.from(getContext())
+                .inflate(R.layout.fragment_step_detail, container, false);
         stepDescription = rootView.findViewById(R.id.step_description);
         previousImageView = rootView.findViewById(R.id.previous_video);
         nextImageView = rootView.findViewById(R.id.next_video);
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player);
-
+        layoutContainer = rootView.findViewById(R.id.detail_step_container);
         int orientation = getResources().getConfiguration().orientation;
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
         if (orientation == 2 && minSize < 600) {
@@ -90,7 +94,8 @@ public class StepDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (mStepIndex + 1 == stepsList.size()) {
-                    Toast.makeText(container.getContext(), "Recipe Completed", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(layoutContainer,
+                            "Congratulations ! recipe completed", Snackbar.LENGTH_SHORT).show();
                 } else {
                     changeStepClickListener.changeStepClickListener(mStepIndex + 1);
                 }
@@ -100,7 +105,8 @@ public class StepDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (mStepIndex == 0) {
-                    Toast.makeText(container.getContext(), "This is the first Step", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(layoutContainer,
+                            "You are in the first step", Snackbar.LENGTH_SHORT).show();
                 } else {
                     changeStepClickListener.changeStepClickListener(mStepIndex - 1);
                 }
@@ -110,11 +116,13 @@ public class StepDetailFragment extends Fragment {
         if (savedInstanceState == null) {
             if (videoUrl != null) {
                 if (!videoUrl.equals("")) {
-                    Uri uri = Uri.parse(videoUrl).buildUpon().build();
+                    uri = Uri.parse(videoUrl).buildUpon().build();
                     initializePlayer(uri);
-                }else{
+                } else {
                     simpleExoPlayerView.hideController();
-                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.no_video_available));
+                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
+                            getContext().getResources(),
+                            R.drawable.no_video_available));
                 }
             }
             stepDescription.setText(stepDescriptionString);
@@ -128,9 +136,10 @@ public class StepDetailFragment extends Fragment {
                     initializePlayer(uri);
                 }
             }
+            isPlaying = savedInstanceState.getBoolean("is_playing");
+            simpleExoPlayer.setPlayWhenReady(isPlaying);
             stepDescription.setText(savedInstanceState.getString("stepDescription"));
         }
-        //needed to get the video url and the description by an intent
 
         return rootView;
     }
@@ -138,12 +147,10 @@ public class StepDetailFragment extends Fragment {
 
     public void initializePlayer(Uri uri) {
         if (simpleExoPlayer == null) {
-            // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             simpleExoPlayerView.setPlayer(simpleExoPlayer);
-            // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getActivity(), "ClassicalMusicQuiz");
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
@@ -151,15 +158,19 @@ public class StepDetailFragment extends Fragment {
                 simpleExoPlayer.seekTo(position);
             }
             simpleExoPlayer.prepare(mediaSource);
-            simpleExoPlayer.setPlayWhenReady(true);
+            simpleExoPlayer.setPlayWhenReady(isPlaying);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (!videoUrl.equals("")) {
+        if (simpleExoPlayer != null) {
+            isPlaying = simpleExoPlayer.getPlayWhenReady();
+            position = simpleExoPlayer.getCurrentPosition();
             simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
         }
     }
 
@@ -167,11 +178,10 @@ public class StepDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         initializePlayer(uri);
-
     }
 
-    public void setStepList(List<Step> stepss) {
-        stepsList = stepss;
+    public void setStepList(List<Step> steps) {
+        stepsList = steps;
     }
 
     public void setStepData(int stepId) {
@@ -192,6 +202,7 @@ public class StepDetailFragment extends Fragment {
         outState.putParcelableArrayList("stepsReceived", (ArrayList<? extends Parcelable>) stepsList);
         long position = simpleExoPlayer.getCurrentPosition();
         outState.putLong("video_state", position);
+        outState.putBoolean("is_playing", simpleExoPlayer.getPlayWhenReady());
         super.onSaveInstanceState(outState);
     }
 

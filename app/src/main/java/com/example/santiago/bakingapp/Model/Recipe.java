@@ -11,12 +11,14 @@ public class Recipe {
     private String mRecipeName;
     private String mServings;
     private Bitmap mImageBitmap;
+    private String imageUrl;
 
-    public Recipe(String id, String recipeName, String servings,Bitmap imageBitmap){
-        mId =id;
-        mRecipeName = recipeName;
-        mServings = servings;
-        mImageBitmap = imageBitmap;
+    public Recipe(String mId, String mRecipeName, String mServings, Bitmap mImageBitmap, String imageUrl) {
+        this.mId = mId;
+        this.mRecipeName = mRecipeName;
+        this.mServings = mServings;
+        this.mImageBitmap = mImageBitmap;
+        this.imageUrl = imageUrl;
     }
 
     public String getId() {
@@ -34,4 +36,9 @@ public class Recipe {
     public Bitmap getImageBitmap() {
         return mImageBitmap;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
 }

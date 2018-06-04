@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="18dp">
+    android:padding="18dp"
+    android:id="@+id/container_ingredients">
 
     <TextView
         android:id="@+id/ingredient_name"

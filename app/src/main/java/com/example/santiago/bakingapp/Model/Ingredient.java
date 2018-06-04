@@ -30,33 +30,31 @@ public class Ingredient implements Parcelable {
         return mIngredient;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(mQuantity);
-        parcel.writeString(mMeasure);
-        parcel.writeString(mIngredient);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mQuantity);
+        dest.writeString(this.mMeasure);
+        dest.writeString(this.mIngredient);
     }
-    private Ingredient(Parcel in) {
-        mQuantity = in.readString();
-        mMeasure = in.readString();
-        mIngredient = in.readString();
-    }
-    public static final Parcelable.Creator<Ingredient> CREATOR
-            = new Parcelable.Creator<Ingredient>() {
 
-        // This simply calls our new constructor (typically private) and
-        // passes along the unmarshalled `Parcel`, and then returns the new object!
+    protected Ingredient(Parcel in) {
+        this.mQuantity = in.readString();
+        this.mMeasure = in.readString();
+        this.mIngredient = in.readString();
+    }
+
+    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
         @Override
-        public Ingredient createFromParcel(Parcel in) {
-            return new Ingredient(in);
+        public Ingredient createFromParcel(Parcel source) {
+            return new Ingredient(source);
         }
 
-        // We just need to copy this and change the type to match our class.
         @Override
         public Ingredient[] newArray(int size) {
             return new Ingredient[size];

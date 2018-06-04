@@ -1,6 +1,7 @@
 package com.example.santiago.bakingapp.Adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.santiago.bakingapp.Model.Recipe;
 import com.example.santiago.bakingapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -17,22 +19,26 @@ import java.util.List;
  * Created by Santiago on 28/01/2018.
  */
 
-public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipesAdapter.RecipeViewHolder>{
+public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipesAdapter.RecipeViewHolder> {
     private List<Recipe> mRecipesList;
-    private Context mConext;
+    private Context mContext;
     final private RecipesOnClickListener mRecipesOnClickListener;
-    public interface RecipesOnClickListener{
+
+    public interface RecipesOnClickListener {
         void onClick(Recipe recipeClicked);
     }
-    public RecyclerRecipesAdapter(Context context,RecipesOnClickListener recipesOnClickListener){
-        mConext = context;
+
+    public RecyclerRecipesAdapter(Context context, RecipesOnClickListener recipesOnClickListener) {
+        mContext = context;
         mRecipesOnClickListener = recipesOnClickListener;
     }
-    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView recipeName;
         public final TextView recipeServings;
         public final ImageView recipeImage;
         public final ImageView addRecipeWidget;
+
         public RecipeViewHolder(View itemView) {
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipe_name);
@@ -40,20 +46,19 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
             recipeImage = itemView.findViewById(R.id.recipe_image);
             addRecipeWidget = itemView.findViewById(R.id.add_recipe_widget);
             itemView.setOnClickListener(this);
-            //addRecipeWidget.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-           mRecipesOnClickListener.onClick(mRecipesList.get(getAdapterPosition()));
+            mRecipesOnClickListener.onClick(mRecipesList.get(getAdapterPosition()));
         }
 
     }
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mConext).inflate(R.layout.list_item_recipes,parent,false);
-        return  new RecipeViewHolder(view);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_recipes, parent, false);
+        return new RecipeViewHolder(view);
     }
 
     @Override
@@ -61,16 +66,21 @@ public class RecyclerRecipesAdapter extends RecyclerView.Adapter<RecyclerRecipes
         Recipe actualRecipe = mRecipesList.get(position);
         holder.recipeName.setText(actualRecipe.getRecipeName());
         holder.recipeServings.setText(String.valueOf(actualRecipe.getServings()));
-        holder.recipeImage.setImageBitmap(actualRecipe.getImageBitmap());
-
+        String recipeUrl = actualRecipe.getImageUrl();
+        if (recipeUrl != null && !recipeUrl.isEmpty()) {
+            Picasso.get().load(Uri.parse(recipeUrl)).into(holder.recipeImage);
+        } else {
+            holder.recipeImage.setImageBitmap(actualRecipe.getImageBitmap());
+        }
     }
 
     @Override
     public int getItemCount() {
-        if (null ==mRecipesList) return 0;
+        if (null == mRecipesList) return 0;
         return mRecipesList.size();
     }
-    public void setData(List<Recipe> recipesList){
+
+    public void setData(List<Recipe> recipesList) {
         mRecipesList = recipesList;
         notifyDataSetChanged();
     }

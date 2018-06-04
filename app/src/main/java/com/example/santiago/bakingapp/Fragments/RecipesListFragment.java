@@ -24,26 +24,26 @@ import com.example.santiago.bakingapp.Utilities.NetworkUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.supercharge.funnyloader.FunnyLoader;
+
 /**
  * Created by Santiago on 28/01/2018.
  */
 
-public class RecipesListFragment extends Fragment implements RecyclerRecipesAdapter.RecipesOnClickListener, LoaderManager.LoaderCallbacks<List<Recipe>> {
-    private static final String TAG = RecipesListFragment.class.getSimpleName();
+public class RecipesListFragment extends Fragment implements
+        RecyclerRecipesAdapter.RecipesOnClickListener, LoaderManager.LoaderCallbacks<List<Recipe>> {
 
+    private static final String TAG = RecipesListFragment.class.getSimpleName();
     private RecyclerView recyclerView;
     private RecyclerRecipesAdapter recyclerRecipesAdapter;
     OnRecipeClickListener onRecipeClickListener;
     private static final int LOADER_ID = 1;
     private ProgressBar progressBar;
+    private FunnyLoader funnyLoader;
     private List<Recipe> recipes;
-    AddShorcut addShorcut;
 
     public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipeClicked);
-    }
-    public interface AddShorcut{
-        void addShortcut(Recipe recipeAdded);
     }
 
     public RecipesListFragment() {
@@ -54,7 +54,6 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         super.onAttach(context);
         try {
             onRecipeClickListener = (OnRecipeClickListener) context;
-            addShorcut = (AddShorcut) context;
         } catch (Exception e) {
             Log.d(TAG, "onAttach error  : " + e);
         }
@@ -66,33 +65,41 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
         View rootView = inflater.inflate(R.layout.fragment_recipes_list, container, false);
         progressBar = rootView.findViewById(R.id.progress_bar_recipes);
         progressBar.setVisibility(View.GONE);
+        funnyLoader = rootView.findViewById(R.id.funny_loader);
+        funnyLoader.setVisibility(View.GONE);
         recyclerView = rootView.findViewById(R.id.recycler_recipes);
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == 2) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(container.getContext(), 2);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
             recyclerView.setLayoutManager(gridLayoutManager);
         } else if (orientation == 1) {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
         }
         recyclerView.setHasFixedSize(true);
-        recyclerRecipesAdapter = new RecyclerRecipesAdapter(container.getContext(), this);
+        recyclerRecipesAdapter = new RecyclerRecipesAdapter(getContext(), this);
         recyclerView.setAdapter(recyclerRecipesAdapter);
-        //recyclerRecipesAdapter.setData(insertFakeData());
         loadData();
         return rootView;
     }
 
     private void loadData() {
         LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(LOADER_ID,null,this);
+        funnyLoader.start();
+        funnyLoader.setVisibility(View.VISIBLE);
+        loaderManager.initLoader(LOADER_ID, null, this);
     }
 
     @Override
     public void onClick(Recipe recipeClicked) {
         onRecipeClickListener.onRecipeClick(recipeClicked);
-        addShorcut.addShortcut(recipeClicked);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -112,7 +119,7 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
                     String json = NetworkUtils.makeHttpRequest(NetworkUtils.createUrl());
                     recipes = NetworkUtils.getJsonRecipes(getContext(), json);
                 } catch (Exception e) {
-                    Log.e(TAG, "error inload in background: " + e.getMessage());
+                    Log.e(TAG, "error loading in background: " + e.getMessage());
                 }
                 return recipes;
             }
@@ -123,11 +130,13 @@ public class RecipesListFragment extends Fragment implements RecyclerRecipesAdap
     public void onLoadFinished(Loader<List<Recipe>> loader, List<Recipe> data) {
         recyclerRecipesAdapter.setData(data);
         progressBar.setVisibility(View.GONE);
+        funnyLoader.setVisibility(View.GONE);
+        funnyLoader.stop();
     }
 
     @Override
     public void onLoaderReset(Loader<List<Recipe>> loader) {
-
+        recyclerRecipesAdapter.setData(null);
     }
 
 }

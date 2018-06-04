@@ -3,6 +3,7 @@ package com.example.santiago.bakingapp.Widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
@@ -19,51 +20,43 @@ import java.util.List;
  */
 
 public class IngredientsWidgetProvider extends AppWidgetProvider {
-    SharedPreferences sharedPreferences;
+    public static final String KEY_EXTRA_INGREDIENTS = "key_extra_ingredients";
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, String recipeName, List<Ingredient> ingredientList) {
+                                       int appWidgetId, String recipeName) {
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_app_widget);
-        views.setTextViewText(R.id.title_w, recipeName);
-        views.removeAllViews(R.id.container_w);
-        if (ingredientList!=null){
-            for (Ingredient ingredient : ingredientList) {
-                RemoteViews ingredientView = new RemoteViews(context.getPackageName(),
-                        R.layout.list_item_ingredient);
-                ingredientView.setTextViewText(R.id.ingredient_name,ingredient.getIngredient());
-                ingredientView.setTextViewText(R.id.ingredient_quantity,ingredient.getQuantity());
-                ingredientView.setTextViewText(R.id.ingredient_measure,ingredient.getMeasure());
-                views.addView(R.id.container_w, ingredientView);
-            }
-        }
-
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.recipe_app_widget);
+        remoteViews.setTextViewText(R.id.widget_title, recipeName);
+        Intent intent = new Intent(context, ServiceBindWidget.class);
+        remoteViews.setRemoteAdapter(R.id.widget_ingredients_list, intent);
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        List<Ingredient> ingredients ;
-        sharedPreferences = context.getSharedPreferences("preferences",
-                Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String result = sharedPreferences.getString("ingredients",null);
-        Ingredient[] arrayIngredient = gson.fromJson(result,Ingredient[].class);
-        ingredients = Arrays.asList(arrayIngredient);
-        ingredients = new ArrayList<>(ingredients);
-        String recipeName = sharedPreferences.getString("recipe_name",null);
-
+        String recipeName = getRecipeName(context);
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredients);
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName);
         }
     }
 
-    @Override
-    public void onEnabled(Context context) {
+    public static List<Ingredient> getIngredientList(Context context) {
+        List<Ingredient> ingredients;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("preferences",
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String result = sharedPreferences.getString("ingredients", null);
+        Ingredient[] arrayIngredient = gson.fromJson(result, Ingredient[].class);
+        ingredients = Arrays.asList(arrayIngredient);
+        ingredients = new ArrayList<>(ingredients);
+        return ingredients;
     }
 
-    @Override
-    public void onDisabled(Context context) {
+    public String getRecipeName(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("preferences",
+                Context.MODE_PRIVATE);
+        String recipeName = sharedPreferences.getString("recipe_name", null);
+        return recipeName;
     }
 }

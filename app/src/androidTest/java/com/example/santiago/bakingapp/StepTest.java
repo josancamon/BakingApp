@@ -83,16 +83,13 @@ public class StepTest {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("No se encontró "+text);
+                description.appendText(text + " Not found");
             }
 
             @Override
             protected boolean matchesSafely(RecyclerStepsAdapter.StepsViewHolder item) {
-                TextView textView = item.itemView.findViewById(R.id.step_text_view);
-                if (textView==null){
-                    return false;
-                }
-                return textView.getText().toString().contains(text);
+                TextView textView = item.itemView.findViewById(R.id.title_step);
+                return textView != null && textView.getText().toString().contains(text);
             }
         };
     }

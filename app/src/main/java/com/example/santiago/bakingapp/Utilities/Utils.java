@@ -11,22 +11,16 @@ import java.util.HashMap;
  */
 
 public class Utils {
-    public static Bitmap retriveVideoFrameFromVideo(String videoPath) throws Throwable
-    {
-        Bitmap bitmap = null;
+    public static Bitmap retrieveVideoFrameFromVideo(String videoPath) throws Throwable {
+        Bitmap bitmap;
         MediaMetadataRetriever mediaMetadataRetriever = null;
-        try
-        {
+        try {
             mediaMetadataRetriever = new MediaMetadataRetriever();
-            if (Build.VERSION.SDK_INT >= 14)
-                mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
-            else
-                mediaMetadataRetriever.setDataSource(videoPath);
-            //   mediaMetadataRetriever.setDataSource(videoPath);
+            mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
             bitmap = mediaMetadataRetriever.getFrameAtTime();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Throwable("Exception in retriveVideoFrameFromVideo(String videoPath)" + e.getMessage());
+            throw new Throwable("Exception in retrieveVideoFrameFromVideo(String videoPath)" + e.getMessage());
 
         } finally {
             if (mediaMetadataRetriever != null) {

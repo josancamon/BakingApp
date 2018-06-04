@@ -1,11 +1,14 @@
 package com.example.santiago.bakingapp.Fragments;
 
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,8 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.example.santiago.bakingapp.Model.Ingredient;
 import com.example.santiago.bakingapp.R;
@@ -34,31 +36,28 @@ import java.util.List;
  * Created by Santiago on 7/02/2018.
  */
 
-public class IngredientsStepsViewPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Ingredient>> {
+public class IngredientsStepsViewPagerFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<List<Ingredient>> {
     private static final String TAG = IngredientsStepsViewPagerFragment.class.getSimpleName();
-    private ViewPager viewPager;
     private String mRecipeId;
-    private ProgressBar progressBar;
-    private FloatingActionButton fabWidget;
-    private List<Ingredient> ingredientsToWidget;
     private String recipeName;
+    private RelativeLayout layoutContainer;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients_and_steps_view_pager, container, false);
-        progressBar = rootView.findViewById(R.id.progress_bar);
         android.support.v7.widget.Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        progressBar.setVisibility(View.GONE);
-        fabWidget = rootView.findViewById(R.id.fab_widget);
+        layoutContainer = rootView.findViewById(R.id.details_container);
+        FloatingActionButton fabWidget = rootView.findViewById(R.id.fab_widget);
         fabWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadWidgetIngredients();
             }
         });
-        viewPager = rootView.findViewById(R.id.ingredients_steps_view_pager);
+        ViewPager viewPager = rootView.findViewById(R.id.ingredients_steps_view_pager);
         MyPagerAdapter adapterViewPager = new MyPagerAdapter(getFragmentManager());
         adapterViewPager.setRecipeId(mRecipeId);
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
@@ -81,21 +80,19 @@ public class IngredientsStepsViewPagerFragment extends Fragment implements Loade
             super(fm);
         }
 
-        // Returns total number of pages
         @Override
         public int getCount() {
             return NUM_ITEMS;
         }
 
-        // Returns the fragment to display for that page
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: // Fragment # 0 - This will show FirstFragment
+                case 0:
                     IngredientsListFragment ingredientsListFragment = new IngredientsListFragment();
                     ingredientsListFragment.setRecipeId(mRecipeId);
                     return ingredientsListFragment;
-                case 1: // Fragment # 0 - This will show FirstFragment
+                case 1:
                     StepsListFragment stepsListFragment = new StepsListFragment();
                     if (mRecipeId!=null){
                         stepsListFragment.setRecipeId(Integer.valueOf(mRecipeId));
@@ -106,7 +103,6 @@ public class IngredientsStepsViewPagerFragment extends Fragment implements Loade
             }
         }
 
-        // Returns the page title for the top indicator
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
@@ -156,7 +152,6 @@ public class IngredientsStepsViewPagerFragment extends Fragment implements Loade
     @Override
     public void onLoadFinished(Loader<List<Ingredient>> loader, List<Ingredient> data) {
         if (data!=null){
-            //ingredientsToWidget = data;
             SharedPreferences sharedPreferences = getActivity()
                     .getSharedPreferences("preferences", Context.MODE_PRIVATE);
             Gson gson = new Gson();
@@ -165,14 +160,13 @@ public class IngredientsStepsViewPagerFragment extends Fragment implements Loade
             editor.putString("ingredients",list);
             editor.putString("recipe_name",recipeName);
             editor.apply();
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getActivity());
-            Bundle bundle = new Bundle();
-            int appWidgetId = bundle.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-            IngredientsWidgetProvider.updateAppWidget(getActivity(), appWidgetManager, appWidgetId, recipeName,
-                    data);
-            Toast.makeText(getActivity(), "Added " + " to Widget.   updated", Toast.LENGTH_SHORT).show();
+            int[] appWidgetIds = AppWidgetManager.getInstance(getContext())
+                    .getAppWidgetIds(new ComponentName(getContext(),IngredientsWidgetProvider.class));
+            Intent intentUpdate = new Intent(getContext(),IngredientsWidgetProvider.class);
+            intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,appWidgetIds);
+            getContext().sendBroadcast(intentUpdate);
+            Snackbar.make(layoutContainer,"Widget info updated, please check it",Snackbar.LENGTH_LONG).show();
 
         }
     }

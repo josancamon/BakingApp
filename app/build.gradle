@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.santiago.bakingapp"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -41,5 +41,7 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
     androidTestCompile 'com.android.support.test:rules:1.0.1'
     implementation  'com.google.code.gson:gson:2.8.2'
+    compile  'it.michelelacorte.elasticprogressbar:library:1.0.5@aar'
+    implementation 'io.supercharge:funnyloader:0.2.0'
 
 }

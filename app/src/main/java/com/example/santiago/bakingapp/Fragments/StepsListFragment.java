@@ -27,7 +27,8 @@ import java.util.List;
  * Created by Santiago on 28/01/2018.
  */
 
-public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.StepOnclickListener, LoaderManager.LoaderCallbacks<List<Step>> {
+public class StepsListFragment extends Fragment implements
+        RecyclerStepsAdapter.StepOnclickListener, LoaderManager.LoaderCallbacks<List<Step>> {
 
     public StepsListFragment() {
     }

@@ -38,7 +38,6 @@ public class Step implements Parcelable {
         return mVideoUrl;
     }
 
-
     public String getThumbnailUrl() {
         return mThumbnailUrl;
     }
@@ -49,31 +48,28 @@ public class Step implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mStepId);
-        parcel.writeString(mShortDescription);
-        parcel.writeString(mDescription);
-        parcel.writeString(mVideoUrl);
-        parcel.writeString(mThumbnailUrl);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mStepId);
+        dest.writeString(this.mShortDescription);
+        dest.writeString(this.mDescription);
+        dest.writeString(this.mVideoUrl);
+        dest.writeString(this.mThumbnailUrl);
     }
-    private Step(Parcel in) {
-        mStepId = in.readInt();
-        mShortDescription = in.readString();
-        mDescription = in.readString();
-        mVideoUrl = in.readString();
-        mThumbnailUrl = in.readString();
-    }
-    public static final Parcelable.Creator<Step> CREATOR
-            = new Parcelable.Creator<Step>() {
 
-        // This simply calls our new constructor (typically private) and
-        // passes along the unmarshalled `Parcel`, and then returns the new object!
+    protected Step(Parcel in) {
+        this.mStepId = in.readInt();
+        this.mShortDescription = in.readString();
+        this.mDescription = in.readString();
+        this.mVideoUrl = in.readString();
+        this.mThumbnailUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
         @Override
-        public Step createFromParcel(Parcel in) {
-            return new Step(in);
+        public Step createFromParcel(Parcel source) {
+            return new Step(source);
         }
 
-        // We just need to copy this and change the type to match our class.
         @Override
         public Step[] newArray(int size) {
             return new Step[size];

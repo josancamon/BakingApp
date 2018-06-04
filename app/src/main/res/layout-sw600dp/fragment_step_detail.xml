@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/detail_step_container">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/simple_exo_player"
@@ -39,7 +40,8 @@
         android:src="@drawable/left_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:contentDescription="go to previous video"/>
 
     <ImageView
         android:visibility="gone"
@@ -51,5 +53,6 @@
         android:src="@drawable/right_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:contentDescription="go to next video"/>
 </android.support.constraint.ConstraintLayout>

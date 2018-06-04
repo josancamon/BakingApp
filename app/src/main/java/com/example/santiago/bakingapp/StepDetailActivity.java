@@ -29,7 +29,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
             stepDetailFragment.setStepData(mStepId);
             getSupportFragmentManager().beginTransaction().add(R.id.rec, stepDetailFragment).commit();
         }
-        //Log.d(TAG, "step detail activity :  "+shortDescription+"- "+description+" - "+videoUrl);
 
     }
 
@@ -45,7 +44,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-       // outState.putParcelableArrayList("stepsList", (ArrayList<? extends Parcelable>) stepsList);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 }

@@ -41,10 +41,7 @@ public class RecipesTest {
             @Override
             protected boolean matchesSafely(RecyclerRecipesAdapter.RecipeViewHolder item) {
                 TextView timeViewText = item.itemView.findViewById(R.id.recipe_name);
-                if (timeViewText == null) {
-                    return false;
-                }
-                return timeViewText.getText().toString().contains(text);
+                return timeViewText != null && timeViewText.getText().toString().contains(text);
             }
         };
     }
