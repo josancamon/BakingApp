@@ -97,12 +97,6 @@ public class RecipesListFragment extends Fragment implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    @Override
     public Loader<List<Recipe>> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<List<Recipe>>(getContext()) {
             @Override

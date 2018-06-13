@@ -2,7 +2,6 @@ package com.example.santiago.bakingapp.Utilities;
 
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 
 import java.util.HashMap;
 

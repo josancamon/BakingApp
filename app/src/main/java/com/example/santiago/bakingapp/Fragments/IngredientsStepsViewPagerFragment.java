@@ -68,8 +68,9 @@ public class IngredientsStepsViewPagerFragment extends Fragment
 
         return rootView;
     }
-    private void loadWidgetIngredients(){
-        getLoaderManager().initLoader(0,null,this);
+
+    private void loadWidgetIngredients() {
+        getLoaderManager().initLoader(0, null, this);
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
@@ -94,7 +95,7 @@ public class IngredientsStepsViewPagerFragment extends Fragment
                     return ingredientsListFragment;
                 case 1:
                     StepsListFragment stepsListFragment = new StepsListFragment();
-                    if (mRecipeId!=null){
+                    if (mRecipeId != null) {
                         stepsListFragment.setRecipeId(Integer.valueOf(mRecipeId));
                     }
                     return stepsListFragment;
@@ -124,7 +125,8 @@ public class IngredientsStepsViewPagerFragment extends Fragment
     public void setRecipeId(String id) {
         mRecipeId = id;
     }
-    public void setRecipeName(String recipeName){
+
+    public void setRecipeName(String recipeName) {
         this.recipeName = recipeName;
     }
 
@@ -140,8 +142,8 @@ public class IngredientsStepsViewPagerFragment extends Fragment
             public List<Ingredient> loadInBackground() {
                 List<Ingredient> ingredients = null;
                 try {
-                   ingredients= NetworkUtils.getRecipeIngredients(mRecipeId);
-                }catch (Exception e){
+                    ingredients = NetworkUtils.getRecipeIngredients(mRecipeId);
+                } catch (Exception e) {
                     Log.d(TAG, "loadInBackground: ");
                 }
                 return ingredients;
@@ -151,14 +153,14 @@ public class IngredientsStepsViewPagerFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<List<Ingredient>> loader, List<Ingredient> data) {
-        if (data!=null){
+        if (data != null) {
             SharedPreferences sharedPreferences = getActivity()
                     .getSharedPreferences("preferences", Context.MODE_PRIVATE);
             Gson gson = new Gson();
             String list = gson.toJson(data);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("ingredients",list);
-            editor.putString("recipe_name",recipeName);
+            editor.putString("ingredients", list);
+            editor.putString("recipe_name", recipeName);
             editor.apply();
             int[] appWidgetIds = AppWidgetManager.getInstance(getContext())
                     .getAppWidgetIds(new ComponentName(getContext(),IngredientsWidgetProvider.class));
@@ -166,7 +168,7 @@ public class IngredientsStepsViewPagerFragment extends Fragment
             intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
             intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,appWidgetIds);
             getContext().sendBroadcast(intentUpdate);
-            Snackbar.make(layoutContainer,"Widget info updated, please check it",Snackbar.LENGTH_LONG).show();
+            Snackbar.make(layoutContainer, "Widget info updated, please check it", Snackbar.LENGTH_LONG).show();
 
         }
     }
@@ -175,6 +177,5 @@ public class IngredientsStepsViewPagerFragment extends Fragment
     public void onLoaderReset(Loader<List<Ingredient>> loader) {
 
     }
-    // ...
 }
 

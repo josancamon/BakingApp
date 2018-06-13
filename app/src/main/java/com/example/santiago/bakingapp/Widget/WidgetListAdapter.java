@@ -1,7 +1,6 @@
 package com.example.santiago.bakingapp.Widget;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
@@ -10,25 +9,21 @@ import com.example.santiago.bakingapp.R;
 
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
-
 public class WidgetListAdapter implements RemoteViewsFactory {
     private List<Ingredient> ingredients;
     private Context context;
 
-    public WidgetListAdapter(List<Ingredient> ingredients, Context context) {
-        this.ingredients = ingredients;
+    public WidgetListAdapter(Context context) {
         this.context = context;
     }
 
     @Override
     public void onCreate() {
-
     }
 
     @Override
     public void onDataSetChanged() {
-
+        ingredients = IngredientsWidgetProvider.getIngredientList(context);
     }
 
     @Override
@@ -49,7 +44,7 @@ public class WidgetListAdapter implements RemoteViewsFactory {
         remoteViews.setTextViewText(R.id.ingredient_name_widget, ingredient.getIngredient());
         remoteViews.setTextViewText(
                 R.id.ingredient_quantity_widget,
-                ingredient.getQuantity()+" " + ingredient.getMeasure());
+                ingredient.getQuantity() + " " + ingredient.getMeasure());
         return remoteViews;
     }
 
@@ -71,10 +66,6 @@ public class WidgetListAdapter implements RemoteViewsFactory {
     @Override
     public boolean hasStableIds() {
         return true;
-    }
-
-    public void setData(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
     }
 
 }
