@@ -2,16 +2,16 @@
 # Baking App
 
 App for [Android Developer Nanodegree program](https://www.udacity.com/course/android-developer-nanodegree--nd801). 
-Android Baking App that will allow Udacity’s resident baker-in-chief, Miriam, to share her recipes with the world. You will create an app that will allow a user to select a recipe and see video-guided steps for how to complete it.
+Android Baking App that allows Udacity’s resident baker-in-chief, Miriam, to share her recipes with the world. I created an app that  allows a user to select a recipe and see video-guided steps for how to complete it.
 
 ## Project Overview
-You will productionize an app, taking it from a functional state to a production-ready state. This will involve finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and adding a library.
+I productionized an app, taking it from a functional state to a production-ready state. This involved me finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and adding a library.
 
 ## Why this Project?
 As a working Android developer, you often have to create and implement apps where you are responsible for designing and planning the steps you need to take to create a production-ready app.
 
 ## What I will learn?
-In this project i will:
+In this project I learned how to:
 * Use MediaPlayer/Exoplayer to display videos.
 * Handle error cases in Android.
 * Add a widget to your app experience.
